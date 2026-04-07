@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
@@ -9,8 +10,9 @@ import {
   Bold, Italic, Underline as UnderlineIcon,
   AlignLeft, AlignCenter, AlignRight,
   List, ListOrdered, Link as LinkIcon,
-  Heading2, Heading3, Quote, Undo, Redo
+  Heading2, Heading3, Quote, Undo, Redo, Image as ImageIcon
 } from 'lucide-react'
+import { uploadImageToStorage, validateImageFile } from '../../lib/storage'
 import styles from './RichEditor.module.css'
 
 const ToolbarButton = ({ onClick, active, title, children }) => (
@@ -24,7 +26,10 @@ const ToolbarButton = ({ onClick, active, title, children }) => (
   </button>
 )
 
-export default function RichEditor({ content, onChange }) {
+export default function RichEditor({ content, onChange, onError }) {
+  const imageInputRef = useRef(null)
+  const [uploadingImage, setUploadingImage] = useState(false)
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -40,6 +45,15 @@ export default function RichEditor({ content, onChange }) {
     },
   })
 
+  useEffect(() => {
+    if (!editor) return
+
+    const nextContent = content || ''
+    if (editor.getHTML() === nextContent) return
+
+    editor.commands.setContent(nextContent, false)
+  }, [content, editor])
+
   if (!editor) return null
 
   const setLink = () => {
@@ -50,6 +64,30 @@ export default function RichEditor({ content, onChange }) {
       return
     }
     editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run()
+  }
+
+  const handleImageSelect = async (event) => {
+    const file = event.target.files?.[0]
+    event.target.value = ''
+    if (!file) return
+
+    const validationError = validateImageFile(file)
+    if (validationError) {
+      onError?.(validationError)
+      return
+    }
+
+    setUploadingImage(true)
+    onError?.('')
+
+    try {
+      const uploaded = await uploadImageToStorage(file, 'editor')
+      editor.chain().focus().setImage({ src: uploaded.url, alt: file.name }).run()
+    } catch (error) {
+      onError?.('본문 이미지 업로드 중 오류가 발생했습니다: ' + error.message)
+    } finally {
+      setUploadingImage(false)
+    }
   }
 
   return (
@@ -94,6 +132,12 @@ export default function RichEditor({ content, onChange }) {
         <ToolbarButton onClick={setLink} active={editor.isActive('link')} title="링크">
           <LinkIcon size={15} />
         </ToolbarButton>
+        <ToolbarButton
+          onClick={() => imageInputRef.current?.click()}
+          title={uploadingImage ? '이미지 업로드 중...' : '이미지 업로드'}
+        >
+          <ImageIcon size={15} />
+        </ToolbarButton>
         <div className={styles.divider} />
         <ToolbarButton onClick={() => editor.chain().focus().undo().run()} title="실행취소">
           <Undo size={15} />
@@ -102,6 +146,13 @@ export default function RichEditor({ content, onChange }) {
           <Redo size={15} />
         </ToolbarButton>
       </div>
+      <input
+        ref={imageInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleImageSelect}
+        className={styles.hiddenInput}
+      />
       <EditorContent editor={editor} className={styles.editor} />
     </div>
   )

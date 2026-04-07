@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { uploadImageToStorage, validateImageFile } from '../lib/storage'
 import RichEditor from '../components/admin/RichEditor'
 import { ArrowLeft, Upload, X, Image as ImageIcon } from 'lucide-react'
 import styles from './AdminPostEditor.module.css'
@@ -38,15 +39,12 @@ export default function AdminPostEditor() {
 
   const handleImageSelect = (e) => {
     const file = e.target.files[0]
-    if (!file) return
-    if (!file.type.startsWith('image/')) {
-      setError('이미지 파일만 업로드 가능합니다.')
+    const validationError = validateImageFile(file)
+    if (validationError) {
+      setError(validationError)
       return
     }
-    if (file.size > 10 * 1024 * 1024) {
-      setError('파일 크기는 10MB 이하여야 합니다.')
-      return
-    }
+
     setImageFile(file)
     setImagePreview(URL.createObjectURL(file))
     setError('')
@@ -62,17 +60,6 @@ export default function AdminPostEditor() {
     setRemovedImagePath(existingImagePath)
     setExistingImageUrl(null)
     setExistingImagePath(null)
-  }
-
-  const uploadImage = async (file) => {
-    const ext = file.name.split('.').pop()
-    const path = `posts/${Date.now()}.${ext}`
-    const { error } = await supabase.storage
-      .from('artblog-images')
-      .upload(path, file, { contentType: file.type })
-    if (error) throw error
-    const { data } = supabase.storage.from('artblog-images').getPublicUrl(path)
-    return { url: data.publicUrl, path }
   }
 
   const handleSubmit = async (e) => {
@@ -95,7 +82,7 @@ export default function AdminPostEditor() {
         if (staleImagePath) {
           await supabase.storage.from('artblog-images').remove([staleImagePath])
         }
-        const uploaded = await uploadImage(imageFile)
+        const uploaded = await uploadImageToStorage(imageFile, 'posts')
         imageUrl = uploaded.url
         imagePath = uploaded.path
       } else if (!existingImageUrl && removedImagePath) {
@@ -174,7 +161,7 @@ export default function AdminPostEditor() {
 
             <div className={styles.field}>
               <label className={styles.label}>내용</label>
-              <RichEditor content={content} onChange={setContent} />
+              <RichEditor content={content} onChange={setContent} onError={setError} />
             </div>
           </div>
 

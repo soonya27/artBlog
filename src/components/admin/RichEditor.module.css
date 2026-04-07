@@ -36,6 +36,10 @@
   color: #0e0e0e;
 }
 
+.hiddenInput {
+  display: none;
+}
+
 .divider {
   width: 1px;
   height: 20px;
@@ -98,4 +102,11 @@
 .editor :global(a) {
   color: var(--accent);
   text-decoration: underline;
+}
+
+.editor :global(img) {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 20px 0;
 }

@@ -72,9 +72,9 @@ export default function Home() {
           <>
             <section className={styles.heroSection}>
               <div className={styles.heroCopy}>
-                <p className={styles.eyebrow}>Artworks</p>
-                <h1 className={styles.heroTitle}>작업 이미지와 기록을 한눈에 보는 아카이브</h1>
-                <p className={styles.heroSub}>완성작, 드로잉, 작업 노트까지 한 흐름 안에서 살펴볼 수 있도록 최근 작업과 전체 게시물을 정리했습니다.</p>
+                {/* <p className={styles.eyebrow}>Artworks</p> */}
+                <h1 className={styles.heroTitle}>Artworks</h1>
+                {/* <p className={styles.heroSub}></p> */}
               </div>
               <div className={styles.heroMeta}>
                 <div className={styles.metaCard}>
