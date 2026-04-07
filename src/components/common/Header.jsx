@@ -51,9 +51,7 @@ export default function Header() {
               <span>로그아웃</span>
             </button>
           </>
-        ) : (
-          <Link to="/admin/login" className={styles.navLinkMuted}>관리자</Link>
-        )}
+        ) : null}
       </nav>
     </header>
   )
