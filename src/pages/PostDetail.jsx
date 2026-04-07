@@ -38,7 +38,7 @@ export default function PostDetail() {
       await supabase.storage.from('artblog-images').remove([post.image_path])
     }
     await supabase.from('posts').delete().eq('id', id)
-    navigate('/')
+    navigate('/artworks')
   }
 
   if (loading) return <div className={styles.loading}><Header />Loading...</div>
@@ -49,7 +49,7 @@ export default function PostDetail() {
       <Header />
       <main className={styles.main}>
         <div className={styles.topBar}>
-          <Link to="/" className={styles.back}><ArrowLeft size={16} /> 갤러리로</Link>
+          <Link to="/artworks" className={styles.back}><ArrowLeft size={16} /> 아카이브로</Link>
           {user && (
             <div className={styles.actions}>
               <Link to={`/admin/edit/${id}`} className={`btn-ghost ${styles.actionBtn}`}>

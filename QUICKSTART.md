@@ -45,7 +45,19 @@ cp .env.example .env
 ```env
 VITE_SUPABASE_URL=https://xxxxx.supabase.co  # 위에서 복사한 URL
 VITE_SUPABASE_ANON_KEY=eyJhbGc...          # 위에서 복사한 key
+VITE_EMAILJS_SERVICE_ID=service_xxxxxxx
+VITE_EMAILJS_TEMPLATE_ID=template_xxxxxxx
+VITE_EMAILJS_PUBLIC_KEY=your_public_key
 ```
+
+**④ EmailJS 설정**
+
+- https://www.emailjs.com 접속 → 계정 생성
+- Email Service 연결
+- Email Template 생성
+- 템플릿 변수로 `name`, `email`, `title`, `message`, `submitted_at`, `contact_email` 사용
+- EmailJS 템플릿의 `To Email` 필드에 `{{contact_email}}` 입력
+- 발급된 `Service ID`, `Template ID`, `Public Key`를 `.env`에 입력
 
 **③ 관리자 계정 생성**
 

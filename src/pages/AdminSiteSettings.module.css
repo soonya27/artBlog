@@ -1,0 +1,122 @@
+.page {
+  min-height: 100vh;
+  background: var(--bg);
+  padding: 40px 48px 80px;
+}
+
+.topBar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.backBtn:hover {
+  color: var(--accent);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 400;
+}
+
+.loading {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.form {
+  max-width: 920px;
+  display: grid;
+  gap: 28px;
+}
+
+.section {
+  display: grid;
+  gap: 20px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  padding: 28px;
+}
+
+.sectionHeader {
+  display: grid;
+  gap: 6px;
+}
+
+.sectionTitle {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 400;
+}
+
+.sectionText {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+}
+
+.notice {
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  background: rgba(201, 168, 76, 0.06);
+  color: var(--text-secondary);
+  padding: 14px 16px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.error {
+  color: var(--danger);
+  font-size: 14px;
+}
+
+.success {
+  color: var(--accent);
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 24px 20px 60px;
+  }
+
+  .topBar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .section {
+    padding: 20px;
+  }
+}

@@ -41,7 +41,21 @@ npm install
 ```env
 VITE_SUPABASE_URL=https://xxxxxxxxxxxxxxxx.supabase.co
 VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+VITE_EMAILJS_SERVICE_ID=service_xxxxxxx
+VITE_EMAILJS_TEMPLATE_ID=template_xxxxxxx
+VITE_EMAILJS_PUBLIC_KEY=your_public_key
 ```
+
+### 3-1단계 — EmailJS 문의 메일 설정
+
+1. [https://www.emailjs.com](https://www.emailjs.com) 에서 계정 생성
+2. Email Service 연결
+3. Email Template 생성
+4. 템플릿 변수에 `name`, `email`, `title`, `message`, `submitted_at`, `contact_email` 사용
+5. EmailJS 템플릿의 `To Email` 필드에 `{{contact_email}}` 입력
+6. Dashboard에서 `Service ID`, `Template ID`, `Public Key`를 `.env`에 입력
+
+수신 이메일 주소는 관리자 화면의 사이트 설정에서 변경하며, 일반 방문자에게는 `contact` 페이지에서 표시만 됩니다.
 
 ### 4단계 — 관리자 계정 생성
 

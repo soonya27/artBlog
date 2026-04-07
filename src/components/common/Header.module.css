@@ -33,6 +33,12 @@
 .nav {
   display: flex;
   align-items: center;
+  gap: 18px;
+}
+
+.mainNav {
+  display: flex;
+  align-items: center;
   gap: 2px;
 }
 
@@ -47,6 +53,10 @@
   transition: color 0.2s ease;
   letter-spacing: 0.03em;
   font-weight: 300;
+}
+
+.navLinkActive {
+  color: var(--text-primary);
 }
 
 .navLink:hover {
@@ -79,6 +89,10 @@
   .navLink {
     padding: 6px 12px;
   }
+
+  .nav {
+    gap: 8px;
+  }
 }
 
 @media (max-width: 600px) {
@@ -97,5 +111,16 @@
   .navLink {
     padding: 6px 8px;
   }
-}
 
+  .nav {
+    gap: 4px;
+  }
+
+  .mainNav {
+    gap: 0;
+  }
+
+  .navLinkMuted {
+    padding: 6px 8px;
+  }
+}

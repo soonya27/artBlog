@@ -75,11 +75,11 @@ export default function Home() {
         ) : (
           <>
             <section className={styles.heroSection}>
-              <div className={styles.heroCopy}>
-                <p className={styles.eyebrow}>Artblog Archive</p>
-                <h1 className={styles.heroTitle}>그림의 결을 모으고, 작업의 시간을 남기는 홈페이지</h1>
+            <div className={styles.heroCopy}>
+                <p className={styles.eyebrow}>Artworks</p>
+                <h1 className={styles.heroTitle}>작업 이미지와 기록을 한눈에 보는 아카이브</h1>
                 <p className={styles.heroSub}>
-                  완성된 이미지뿐 아니라 스케치의 방향, 떠오른 감정, 작업 중의 작은 메모까지 함께 기록하는 공간입니다.
+                  완성작, 드로잉, 작업 노트까지 한 흐름 안에서 살펴볼 수 있도록 최근 작업과 전체 게시물을 정리했습니다.
                 </p>
               </div>
               <div className={styles.heroMeta}>
@@ -115,8 +115,8 @@ export default function Home() {
               <section className={styles.recentSection}>
                 <div className={styles.sectionHeader}>
                   <div>
-                    <p className={styles.sectionEyebrow}>Recent Notes</p>
-                    <h2 className={styles.sectionTitle}>최근 작업 모음</h2>
+                    <p className={styles.sectionEyebrow}>Recent Works</p>
+                    <h2 className={styles.sectionTitle}>최근 업로드</h2>
                   </div>
                   <p className={styles.sectionDescription}>
                     최신 게시물부터 흐름이 자연스럽게 이어지도록 카드형 목록으로 정리했습니다.

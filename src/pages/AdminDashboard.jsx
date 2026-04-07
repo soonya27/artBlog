@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
-import { Plus, Edit2, Trash2, MessageCircle, LogOut, Home } from 'lucide-react'
+import { Plus, Edit2, Trash2, MessageCircle, LogOut, Home, FileText } from 'lucide-react'
 import styles from './AdminDashboard.module.css'
 
 function timeFormat(dateStr) {
@@ -53,9 +53,13 @@ export default function AdminDashboard() {
           <span className={styles.logoDot}>·</span>
         </div>
         <nav className={styles.sidebarNav}>
-          <Link to="/" className={styles.sidebarLink}>
+          <Link to="/about" className={styles.sidebarLink}>
             <Home size={16} />
             <span>사이트 보기</span>
+          </Link>
+          <Link to="/admin/site-settings" className={styles.sidebarLink}>
+            <FileText size={16} />
+            <span>사이트 설정</span>
           </Link>
           <Link to="/admin/new" className={styles.sidebarLinkAccent}>
             <Plus size={16} />
