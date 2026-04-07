@@ -1,16 +1,16 @@
-import { Link, NavLink, useNavigate } from 'react-router-dom'
-import { useAuth } from '../../hooks/useAuth'
-import { LogOut, Settings } from 'lucide-react'
-import styles from './Header.module.css'
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
+import { LogOut, Settings } from "lucide-react";
+import styles from "./Header.module.css";
 
 export default function Header() {
-  const { user, signOut } = useAuth()
-  const navigate = useNavigate()
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
 
   const handleSignOut = async () => {
-    await signOut()
-    navigate('/')
-  }
+    await signOut();
+    navigate("/");
+  };
 
   return (
     <header className={styles.header}>
@@ -20,22 +20,13 @@ export default function Header() {
       </Link>
       <nav className={styles.nav}>
         <div className={styles.mainNav}>
-          <NavLink
-            to="/about"
-            className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
-          >
-            About
-          </NavLink>
-          <NavLink
-            to="/artworks"
-            className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
-          >
+          <NavLink to="/artworks" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`}>
             Artworks
           </NavLink>
-          <NavLink
-            to="/contact"
-            className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
-          >
+          <NavLink to="/about" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`}>
+            About
+          </NavLink>
+          <NavLink to="/contact" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`}>
             Contact
           </NavLink>
         </div>
@@ -54,5 +45,5 @@ export default function Header() {
         ) : null}
       </nav>
     </header>
-  )
+  );
 }
