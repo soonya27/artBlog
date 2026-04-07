@@ -1,0 +1,101 @@
+.editorWrap {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--bg-overlay);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 10px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+}
+
+.toolbarBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 3px;
+  color: var(--text-secondary);
+  transition: all 0.15s;
+}
+
+.toolbarBtn:hover {
+  background: var(--border);
+  color: var(--text-primary);
+}
+
+.toolbarBtn.active {
+  background: var(--accent);
+  color: #0e0e0e;
+}
+
+.divider {
+  width: 1px;
+  height: 20px;
+  background: var(--border);
+  margin: 0 4px;
+}
+
+.editor {
+  padding: 16px;
+  min-height: 240px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-primary);
+}
+
+.editor :global(.ProseMirror) {
+  outline: none;
+  min-height: 200px;
+}
+
+.editor :global(.ProseMirror p.is-editor-empty:first-child::before) {
+  content: attr(data-placeholder);
+  color: var(--text-muted);
+  pointer-events: none;
+  float: left;
+  height: 0;
+}
+
+.editor :global(h2) {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 400;
+  margin: 16px 0 8px;
+}
+
+.editor :global(h3) {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 400;
+  margin: 14px 0 6px;
+}
+
+.editor :global(p) {
+  margin-bottom: 8px;
+}
+
+.editor :global(blockquote) {
+  border-left: 3px solid var(--accent);
+  padding-left: 16px;
+  color: var(--text-secondary);
+  margin: 12px 0;
+}
+
+.editor :global(ul),
+.editor :global(ol) {
+  padding-left: 20px;
+  margin-bottom: 8px;
+}
+
+.editor :global(a) {
+  color: var(--accent);
+  text-decoration: underline;
+}

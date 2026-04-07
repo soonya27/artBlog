@@ -1,0 +1,152 @@
+.section {
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 400;
+  font-style: italic;
+  margin-bottom: 24px;
+  color: var(--text-primary);
+}
+
+.count {
+  color: var(--accent);
+  font-style: normal;
+  font-size: 14px;
+  margin-left: 4px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin-bottom: 32px;
+}
+
+.empty {
+  color: var(--text-muted);
+  font-size: 14px;
+  padding: 20px 0;
+  text-align: center;
+}
+
+.comment {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.commentHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.nickname {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  letter-spacing: 0.03em;
+}
+
+.time {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-right: auto;
+}
+
+.deleteBtn {
+  color: var(--text-muted);
+  padding: 4px;
+  opacity: 0;
+  transition: opacity 0.2s, color 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.comment:hover .deleteBtn {
+  opacity: 1;
+}
+
+.deleteBtn:hover {
+  color: var(--danger);
+}
+
+.commentContent {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.deleteConfirm {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.deleteInput {
+  flex: 1;
+  font-size: 13px !important;
+  padding: 7px 12px !important;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formRow {
+  display: flex;
+  gap: 8px;
+}
+
+.shortInput {
+  flex: 1;
+  font-size: 13px !important;
+}
+
+.contentRow {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.textarea {
+  flex: 1;
+  resize: none;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+}
+
+.submitBtn {
+  background: var(--accent);
+  color: #0e0e0e;
+  padding: 0 16px;
+  height: 82px;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.submitBtn:hover {
+  background: var(--accent-hover);
+}
+
+.submitBtn:disabled {
+  opacity: 0.5;
+}
+
+.error {
+  font-size: 12px;
+  color: var(--danger);
+}
