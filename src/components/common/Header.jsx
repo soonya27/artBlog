@@ -14,7 +14,7 @@ export default function Header() {
 
   return (
     <header className={styles.header}>
-      <Link to="/about" className={styles.logo}>
+      <Link to="/" className={styles.logo}>
         <span className={styles.logoText}>Artblog</span>
         <span className={styles.logoDot}>·</span>
       </Link>

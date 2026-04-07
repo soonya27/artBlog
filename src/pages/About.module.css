@@ -1,8 +1,8 @@
 .page {
   min-height: 100vh;
   background:
-    radial-gradient(circle at top left, rgba(201, 168, 76, 0.12), transparent 32%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 24%),
+    radial-gradient(circle at top left, rgba(143, 107, 72, 0.08), transparent 32%),
+    linear-gradient(180deg, rgba(255, 251, 245, 0.56), transparent 24%),
     var(--bg-page);
 }
 
@@ -14,13 +14,13 @@
 
 .hero {
   max-width: 720px;
-  margin-bottom: 64px;
+  margin-bottom: 56px;
 }
 
 .eyebrow {
   color: var(--accent);
-  font-size: 12px;
-  letter-spacing: 0.18em;
+  font-size: 11px;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   margin-bottom: 18px;
   font-weight: 500;
@@ -28,9 +28,9 @@
 
 .title {
   font-family: var(--font-display);
-  font-size: clamp(52px, 8vw, 96px);
-  line-height: 0.95;
-  font-weight: 300;
+  font-size: clamp(54px, 8vw, 108px);
+  line-height: 0.92;
+  font-weight: 500;
   letter-spacing: -0.03em;
   color: var(--text-primary);
 }
@@ -39,18 +39,18 @@
   margin-top: 24px;
   max-width: 540px;
   color: var(--text-secondary);
-  font-size: 18px;
-  line-height: 1.8;
+  font-size: 16px;
+  line-height: 1.9;
 }
 
 .contentSection {
   border-top: 1px solid var(--border);
-  padding-top: 40px;
+  padding-top: 32px;
 }
 
 .content {
   max-width: 760px;
-  font-size: 17px;
+  font-size: 16px;
   line-height: 1.95;
   color: var(--text-primary);
 }

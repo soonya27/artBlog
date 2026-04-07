@@ -1,20 +1,21 @@
 :root {
-  --bg: #0e0e0e;
-  --bg-page: #0e0e0e;
-  --bg-card: #161616;
-  --bg-muted: #1a1a1a;
-  --bg-overlay: #1c1c1c;
-  --border: #2a2a2a;
-  --border-light: #333;
-  --text-primary: #f0ede6;
-  --text-secondary: #9e9b94;
-  --text-muted: #5a5a5a;
-  --accent: #c9a84c;
-  --accent-hover: #e0bc65;
+  --bg: #f3efe6;
+  --bg-page: #f5f1e8;
+  --bg-card: #ece4d6;
+  --bg-muted: #e7decd;
+  --bg-overlay: #faf7f1;
+  --border: rgba(63, 46, 29, 0.18);
+  --border-light: rgba(63, 46, 29, 0.28);
+  --text-primary: #241a12;
+  --text-secondary: #66584a;
+  --text-muted: #9d8f81;
+  --accent: #8f6b48;
+  --accent-hover: #75563a;
   --danger: #c0392b;
-  --radius: 2px;
+  --radius: 0px;
   --font-display: "Cormorant Garamond", serif;
   --font-body: "DM Sans", sans-serif;
+  --shadow-soft: 0 24px 60px rgba(54, 37, 21, 0.08);
 }
 
 *,
@@ -36,6 +37,7 @@ body {
   font-weight: 300;
   line-height: 1.6;
   min-height: 100vh;
+  text-rendering: optimizeLegibility;
 }
 
 a {
@@ -70,24 +72,26 @@ textarea {
 /* Utility */
 .btn-primary {
   background: var(--accent);
-  color: #0e0e0e;
-  padding: 10px 24px;
-  font-size: 13px;
+  color: #fff8ef;
+  padding: 12px 24px;
+  font-size: 12px;
   font-weight: 500;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   border-radius: var(--radius);
-  transition: background 0.2s;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 .btn-primary:hover {
   background: var(--accent-hover);
+  transform: translateY(-1px);
 }
 
 .btn-ghost {
   color: var(--text-secondary);
-  padding: 8px 16px;
-  font-size: 13px;
-  letter-spacing: 0.05em;
+  padding: 10px 16px;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   transition: all 0.2s;
@@ -99,10 +103,10 @@ textarea {
 
 .input-base {
   width: 100%;
-  background: var(--bg-overlay);
+  background: rgba(255, 252, 247, 0.72);
   border: 1px solid var(--border);
   color: var(--text-primary);
-  padding: 10px 14px;
+  padding: 14px 16px;
   font-size: 14px;
   border-radius: var(--radius);
   outline: none;
