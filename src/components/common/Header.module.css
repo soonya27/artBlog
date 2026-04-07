@@ -5,10 +5,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 40px;
-  background: rgba(14, 14, 14, 0.92);
+  padding: 24px 32px;
+  background: rgba(14, 14, 14, 0.95);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgba(42, 42, 42, 0.5);
 }
 
 .logo {
@@ -19,34 +19,34 @@
 
 .logoText {
   font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 400;
-  font-style: italic;
-  letter-spacing: 0.02em;
+  font-size: 24px;
+  font-weight: 300;
+  letter-spacing: 0.01em;
   color: var(--text-primary);
 }
 
 .logoDot {
   color: var(--accent);
-  font-size: 24px;
+  font-size: 28px;
 }
 
 .nav {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
 }
 
 .navLink {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 7px 14px;
+  padding: 8px 16px;
   font-size: 13px;
   color: var(--text-secondary);
   border-radius: var(--radius);
-  transition: color 0.2s;
+  transition: color 0.2s ease;
   letter-spacing: 0.03em;
+  font-weight: 300;
 }
 
 .navLink:hover {
@@ -58,16 +58,44 @@
   color: var(--text-muted);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 7px 14px;
-  transition: color 0.2s;
+  padding: 8px 16px;
+  transition: color 0.2s ease;
+  font-weight: 400;
 }
 
 .navLinkMuted:hover {
   color: var(--text-secondary);
 }
 
+@media (max-width: 768px) {
+  .header {
+    padding: 18px 24px;
+  }
+
+  .logoText {
+    font-size: 20px;
+  }
+
+  .navLink {
+    padding: 6px 12px;
+  }
+}
+
 @media (max-width: 600px) {
   .header {
     padding: 16px 20px;
   }
+
+  .logoText {
+    font-size: 18px;
+  }
+
+  .navLink span {
+    display: none;
+  }
+
+  .navLink {
+    padding: 6px 8px;
+  }
 }
+
