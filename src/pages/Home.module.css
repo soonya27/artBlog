@@ -101,3 +101,13 @@
     columns: 1;
   }
 }
+
+@media (max-width: 360px) {
+  .main {
+    padding: 16px 12px 60px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+}

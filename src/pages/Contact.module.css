@@ -141,3 +141,17 @@
     padding: 36px 16px 60px;
   }
 }
+
+@media (max-width: 360px) {
+  .main {
+    padding: 28px 12px 60px;
+  }
+
+  .title {
+    font-size: clamp(36px, 11vw, 48px);
+  }
+
+  .emailCard {
+    padding: 16px;
+  }
+}

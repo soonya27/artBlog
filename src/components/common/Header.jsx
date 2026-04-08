@@ -37,7 +37,7 @@ export default function Header() {
               <Settings size={15} />
               <span>관리</span>
             </Link>
-            <button onClick={handleSignOut} className={styles.navLink}>
+            <button onClick={handleSignOut} className={`${styles.navLink} ${styles.logoutBtn}`}>
               <LogOut size={15} />
               <span>로그아웃</span>
             </button>
