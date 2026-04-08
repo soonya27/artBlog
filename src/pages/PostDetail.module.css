@@ -178,6 +178,13 @@
   color: var(--text-primary);
 }
 
+.content img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radius);
+}
+
 @media (max-width: 600px) {
   .title {
     font-size: 28px;

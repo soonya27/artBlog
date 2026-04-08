@@ -1,3 +1,97 @@
+/* ── Gallery variant (Pinterest-style masonry) ── */
+
+.galleryCard {
+  display: block;
+  break-inside: avoid;
+  margin-bottom: 12px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+.galleryCard:hover {
+  transform: translateY(-3px);
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 8px 32px;
+}
+
+.galleryImageWrap {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-muted);
+}
+
+.galleryImage {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 0.5s cubic-bezier(0.2, 0.3, 0.25, 0.9);
+}
+
+.galleryCard:hover .galleryImage {
+  transform: scale(1.04);
+}
+
+.galleryNoImage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 4 / 5;
+  color: var(--text-muted);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.galleryOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  background: linear-gradient(to top, rgba(20, 20, 19, 0.72) 0%, rgba(20, 20, 19, 0.2) 40%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.28s ease;
+}
+
+.galleryCard:hover .galleryOverlay {
+  opacity: 1;
+}
+
+.galleryOverlayContent {
+  width: 100%;
+  padding: 14px 14px 16px;
+}
+
+.galleryDate {
+  font-size: 10px;
+  color: rgba(250, 249, 245, 0.65);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.galleryTitle {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 500;
+  color: #faf9f5;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.galleryComments {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 8px;
+  font-size: 10px;
+  color: rgba(250, 249, 245, 0.65);
+  font-weight: 500;
+}
+
+/* ── Default / Featured / Compact variants ── */
+
 .card {
   display: grid;
   gap: 0;
@@ -16,9 +110,10 @@
 
 .imageWrap {
   position: relative;
-  aspect-ratio: 4 / 5;
   overflow: hidden;
+  aspect-ratio: 4 / 5;
   background: var(--bg-muted);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-soft);
 }
 
@@ -55,7 +150,7 @@
   inset: auto 0 0 0;
   display: flex;
   align-items: flex-end;
-  background: linear-gradient(180deg, rgba(245, 241, 232, 0) 0%, rgba(245, 241, 232, 0.18) 16%, rgba(245, 241, 232, 0.95) 16%, rgba(245, 241, 232, 0.95) 100%);
+  background: linear-gradient(180deg, rgba(245, 244, 237, 0) 0%, rgba(245, 244, 237, 0.18) 16%, rgba(245, 244, 237, 0.95) 40%, rgba(245, 244, 237, 0.97) 100%);
   opacity: 1;
   transition: opacity 0.32s ease;
 }
@@ -153,5 +248,13 @@
   .featured .overlayContent {
     padding: 20px;
     min-height: 144px;
+  }
+
+  .galleryCard {
+    margin-bottom: 8px;
+  }
+
+  .galleryTitle {
+    font-size: 15px;
   }
 }

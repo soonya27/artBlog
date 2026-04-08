@@ -11,6 +11,34 @@ function formatDate(dateString) {
 }
 
 export default function PostCard({ post, variant = 'default', compact = false }) {
+  if (variant === 'gallery') {
+    return (
+      <Link to={`/post/${post.id}`} className={styles.galleryCard}>
+        <div className={styles.galleryImageWrap}>
+          {post.image_url ? (
+            <img src={post.image_url} alt={post.title} className={styles.galleryImage} loading="lazy" />
+          ) : (
+            <div className={styles.galleryNoImage}>
+              <span>No Image</span>
+            </div>
+          )}
+          <div className={styles.galleryOverlay}>
+            <div className={styles.galleryOverlayContent}>
+              <p className={styles.galleryDate}>{formatDate(post.created_at)}</p>
+              <h3 className={styles.galleryTitle}>{post.title}</h3>
+              {(post.comment_count ?? 0) > 0 && (
+                <span className={styles.galleryComments}>
+                  <MessageCircle size={11} />
+                  {post.comment_count}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+      </Link>
+    )
+  }
+
   const cardClassName = [
     styles.card,
     variant === 'featured' ? styles.featured : '',

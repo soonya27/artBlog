@@ -5,87 +5,74 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 32px;
-  background: rgba(245, 241, 232, 0.84);
-  backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--border);
+  padding: 16px 32px;
+  background: rgba(245, 244, 237, 0.88);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-strong);
 }
 
 .logo {
   display: flex;
   align-items: baseline;
-  gap: 6px;
+  gap: 4px;
 }
 
 .logoText {
   font-family: var(--font-display);
-  font-size: 30px;
+  font-size: 26px;
   font-weight: 500;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
   color: var(--text-primary);
 }
 
 .logoDot {
   color: var(--accent);
-  font-size: 24px;
+  font-size: 22px;
 }
 
 .nav {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 4px;
 }
 
 .mainNav {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 2px;
 }
 
 .navLink {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   padding: 6px 10px;
   font-size: 11px;
   color: var(--text-secondary);
   border-radius: var(--radius);
-  transition: color 0.2s ease, opacity 0.2s ease;
-  letter-spacing: 0.18em;
+  transition: color 0.18s ease, background 0.18s ease;
+  letter-spacing: 0.14em;
   font-weight: 500;
   text-transform: uppercase;
 }
 
 .navLinkActive {
   color: var(--text-primary);
+  background: var(--border);
 }
 
 .navLink:hover {
-  color: var(--accent);
-  opacity: 1;
-}
-
-.navLinkMuted {
-  font-size: 12px;
-  color: var(--text-muted);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 8px 16px;
-  transition: color 0.2s ease;
-  font-weight: 400;
-}
-
-.navLinkMuted:hover {
-  color: var(--text-secondary);
+  color: var(--text-primary);
+  background: var(--border);
 }
 
 @media (max-width: 768px) {
   .header {
-    padding: 18px 24px;
+    padding: 14px 24px;
   }
 
   .logoText {
-    font-size: 24px;
+    font-size: 22px;
   }
 
   .navLink {
@@ -93,17 +80,17 @@
   }
 
   .nav {
-    gap: 8px;
+    gap: 2px;
   }
 }
 
 @media (max-width: 600px) {
   .header {
-    padding: 16px 20px;
+    padding: 12px 16px;
   }
 
   .logoText {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   .navLink span {
@@ -115,14 +102,10 @@
   }
 
   .nav {
-    gap: 4px;
+    gap: 2px;
   }
 
   .mainNav {
     gap: 0;
-  }
-
-  .navLinkMuted {
-    padding: 6px 8px;
   }
 }
