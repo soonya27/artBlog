@@ -35,6 +35,17 @@ export default function Contact() {
   const submitForm = async (event) => {
     event.preventDefault();
 
+    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
+      setError("이름, 이메일, 메시지를 모두 입력해 주세요.");
+      setSuccess("");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      setError("올바른 이메일 주소를 입력해 주세요.");
+      setSuccess("");
+      return;
+    }
+
     if (!isEmailJsConfigured()) {
       setError("EmailJS 환경변수가 설정되지 않아 메일을 보낼 수 없습니다.");
       setSuccess("");
@@ -55,13 +66,8 @@ export default function Contact() {
         contact_email: settings.contact_email,
       });
 
-      setSuccess("문의 메일이 전송되었습니다.");
-      setForm({
-        name: "",
-        email: "",
-        subject: "",
-        message: "",
-      });
+      setSuccess("편지가 전송되었습니다 ✉");
+      setForm({ name: "", email: "", subject: "", message: "" });
     } catch (submitError) {
       setError("메일 전송에 실패했습니다. EmailJS 설정을 확인해주세요.");
     } finally {
@@ -74,52 +80,96 @@ export default function Contact() {
       <Header />
       <main className={styles.main}>
         <section className={styles.hero}>
-          <div>
-            <p className={styles.eyebrow}>Contact</p>
-            <h1 className={styles.title}>{settings.contact_email}</h1>
-            <p className={styles.subtitle}>{settings.contact_intro}</p>
-          </div>
-          {/* <div className={styles.emailCard}>
-            <span className={styles.emailLabel}>Delivery</span>
-            {settings.contact_email ? <p className={styles.emailLink}>{settings.contact_email}</p> : <p className={styles.statusText}>문의 폼으로 메일이 전송됩니다.</p>}
-            <p className={styles.statusHint}>이 주소는 관리자 설정에서 변경할 수 있고, 메일 전송에도 같은 주소가 사용됩니다.</p>
-          </div> */}
+          <div className={styles.eyebrow}>contact</div>
+          <h1 className={styles.title}>편지를 보내주세요.</h1>
+          <p className={styles.subtitle}>{settings.contact_intro}</p>
         </section>
 
-        <section className={styles.formSection}>
-          {loading ? (
-            <div className={styles.loading}>불러오는 중...</div>
-          ) : (
+        {loading ? (
+          <div className={styles.loading}>불러오는 중...</div>
+        ) : (
+          <section className={styles.grid}>
             <form className={styles.form} onSubmit={submitForm}>
-              <label className={styles.field}>
-                <span className={styles.label}>이름</span>
-                <input className="input-base" type="text" name="name" value={form.name} onChange={handleChange} placeholder="이름 또는 브랜드명" />
-              </label>
+              <div className={styles.row}>
+                <div className={styles.field}>
+                  <label className={styles.label}>이름</label>
+                  <input
+                    className="input-base"
+                    type="text"
+                    name="name"
+                    value={form.name}
+                    onChange={handleChange}
+                    placeholder="이름 또는 브랜드명"
+                  />
+                </div>
+                <div className={styles.field}>
+                  <label className={styles.label}>이메일</label>
+                  <input
+                    className="input-base"
+                    type="email"
+                    name="email"
+                    value={form.email}
+                    onChange={handleChange}
+                    placeholder="you@example.com"
+                    required
+                  />
+                </div>
+              </div>
 
-              <label className={styles.field}>
-                <span className={styles.label}>이메일</span>
-                <input className="input-base" type="email" name="email" value={form.email} onChange={handleChange} placeholder="reply@example.com" required />
-              </label>
+              <div className={styles.field}>
+                <label className={styles.label}>제목</label>
+                <input
+                  className="input-base"
+                  type="text"
+                  name="subject"
+                  value={form.subject}
+                  onChange={handleChange}
+                  placeholder="간단한 제목 (선택)"
+                />
+              </div>
 
-              <label className={styles.field}>
-                <span className={styles.label}>제목</span>
-                <input className="input-base" type="text" name="subject" value={form.subject} onChange={handleChange} placeholder="문의 제목" />
-              </label>
-
-              <label className={styles.field}>
-                <span className={styles.label}>메시지</span>
-                <textarea className={`input-base ${styles.textarea}`} name="message" value={form.message} onChange={handleChange} placeholder="문의 내용을 적어주세요." required />
-              </label>
-
-              <button type="submit" className="btn-primary" disabled={sending}>
-                {sending ? "전송 중..." : "이메일 보내기"}
-              </button>
+              <div className={styles.field}>
+                <label className={styles.label}>메시지</label>
+                <textarea
+                  className={`input-base ${styles.textarea}`}
+                  name="message"
+                  value={form.message}
+                  onChange={handleChange}
+                  placeholder="하고 싶은 말을 편하게 적어주세요."
+                  required
+                />
+              </div>
 
               {error && <p className={styles.error}>{error}</p>}
               {success && <p className={styles.success}>{success}</p>}
+
+              <div className={styles.submitRow}>
+                <span className={styles.privacy}>이메일은 답장 외에는 사용되지 않습니다.</span>
+                <button type="submit" disabled={sending} className="btn-primary">
+                  {sending ? "전송 중..." : "편지 부치기 ✉"}
+                </button>
+              </div>
             </form>
-          )}
-        </section>
+
+            <aside className={styles.side}>
+              {settings.contact_email && (
+                <div className={styles.sideCard}>
+                  <div className={styles.sideLabel}>email</div>
+                  <div className={styles.sideValue}>{settings.contact_email}</div>
+                  <div className={styles.sideHint}>직접 보내고 싶다면</div>
+                </div>
+              )}
+              <div className={styles.sideCard}>
+                <div className={styles.sideLabel}>reply time</div>
+                <div className={styles.sideValue}>보통 2–3일</div>
+                <div className={styles.sideHint}>주말은 조금 느려요</div>
+              </div>
+              <div className={styles.sideNote}>
+                ✏︎ 의뢰를 보내실 때는, 원하시는 분위기의 이미지 링크나 설명을 함께 주시면 답변이 빠릅니다.
+              </div>
+            </aside>
+          </section>
+        )}
       </main>
     </div>
   );

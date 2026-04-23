@@ -4,14 +4,6 @@ import Header from "../components/common/Header";
 import PostCard from "../components/public/PostCard";
 import styles from "./Home.module.css";
 
-function formatDate(dateString) {
-  return new Date(dateString).toLocaleDateString("ko-KR", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-}
-
 export default function Home() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -42,8 +34,6 @@ export default function Home() {
     setLoading(false);
   };
 
-  const latestPost = posts[0] ?? null;
-
   return (
     <div className={styles.page}>
       <Header />
@@ -54,18 +44,19 @@ export default function Home() {
           <div className={styles.empty}>아직 게시물이 없습니다</div>
         ) : (
           <>
-            <section className={styles.visual}>
-              <h1 className={styles.title}>Artworks</h1>
+            <section className={styles.intro}>
+              <p className={styles.quote}>
+                느리게 그리고, 오래 들여다본 것들을 모아둔 작은 작업실입니다.
+              </p>
               <div className={styles.meta}>
-                <span className={styles.metaItem}>{posts.length} works</span>
-                <span className={styles.metaDot}>·</span>
-                <span className={styles.metaItem}>Updated {formatDate(latestPost.created_at)}</span>
+                <hr className={styles.metaRule} />
+                <span className={styles.metaLabel}>{posts.length}점 · 시간순</span>
               </div>
             </section>
 
             <section className={styles.gallery}>
               {posts.map((post) => (
-                <PostCard key={post.id} post={post} variant="gallery" />
+                <PostCard key={post.id} post={post} />
               ))}
             </section>
           </>

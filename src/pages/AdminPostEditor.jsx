@@ -1,95 +1,93 @@
-import { useEffect, useState, useRef } from 'react'
-import { useParams, useNavigate, Link } from 'react-router-dom'
-import { supabase } from '../lib/supabase'
-import { uploadImageToStorage, validateImageFile } from '../lib/storage'
-import RichEditor from '../components/admin/RichEditor'
-import { ArrowLeft, Upload, X, Image as ImageIcon } from 'lucide-react'
-import styles from './AdminPostEditor.module.css'
+import { useEffect, useState, useRef } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { supabase } from "../lib/supabase";
+import { uploadImageToStorage, validateImageFile } from "../lib/storage";
+import Header from "../components/common/Header";
+import RichEditor from "../components/admin/RichEditor";
+import { Upload, X, Image as ImageIcon } from "lucide-react";
+import styles from "./AdminPostEditor.module.css";
 
 export default function AdminPostEditor() {
-  const { id } = useParams()
-  const navigate = useNavigate()
-  const isEdit = Boolean(id)
-  const fileInputRef = useRef(null)
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const isEdit = Boolean(id);
+  const fileInputRef = useRef(null);
 
-  const [title, setTitle] = useState('')
-  const [content, setContent] = useState('')
-  const [imageFile, setImageFile] = useState(null)
-  const [imagePreview, setImagePreview] = useState(null)
-  const [existingImageUrl, setExistingImageUrl] = useState(null)
-  const [existingImagePath, setExistingImagePath] = useState(null)
-  const [removedImagePath, setRemovedImagePath] = useState(null)
-  const [saving, setSaving] = useState(false)
-  const [error, setError] = useState('')
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [existingImageUrl, setExistingImageUrl] = useState(null);
+  const [existingImagePath, setExistingImagePath] = useState(null);
+  const [removedImagePath, setRemovedImagePath] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    if (isEdit) fetchPost()
-  }, [id])
+    if (isEdit) fetchPost();
+  }, [id]);
 
   const fetchPost = async () => {
-    const { data } = await supabase.from('posts').select('*').eq('id', id).single()
+    const { data } = await supabase.from("posts").select("*").eq("id", id).single();
     if (data) {
-      setTitle(data.title)
-      setContent(data.content ?? '')
-      setExistingImageUrl(data.image_url)
-      setExistingImagePath(data.image_path)
-      setRemovedImagePath(null)
+      setTitle(data.title);
+      setContent(data.content ?? "");
+      setExistingImageUrl(data.image_url);
+      setExistingImagePath(data.image_path);
+      setRemovedImagePath(null);
     }
-  }
+  };
 
   const handleImageSelect = (e) => {
-    const file = e.target.files[0]
-    const validationError = validateImageFile(file)
+    const file = e.target.files[0];
+    const validationError = validateImageFile(file);
     if (validationError) {
-      setError(validationError)
-      return
+      setError(validationError);
+      return;
     }
 
-    setImageFile(file)
-    setImagePreview(URL.createObjectURL(file))
-    setError('')
-  }
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
+    setError("");
+  };
 
   const handleRemoveImage = () => {
-    setImageFile(null)
-    setImagePreview(null)
-    if (fileInputRef.current) fileInputRef.current.value = ''
-  }
+    setImageFile(null);
+    setImagePreview(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
 
   const handleRemoveExistingImage = () => {
-    setRemovedImagePath(existingImagePath)
-    setExistingImageUrl(null)
-    setExistingImagePath(null)
-  }
+    setRemovedImagePath(existingImagePath);
+    setExistingImageUrl(null);
+    setExistingImagePath(null);
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     if (!title.trim()) {
-      setError('제목을 입력해주세요.')
-      return
+      setError("제목을 입력해주세요.");
+      return;
     }
-    setSaving(true)
-    setError('')
+    setSaving(true);
+    setError("");
 
     try {
-      let imageUrl = existingImageUrl ?? null
-      let imagePath = existingImagePath ?? null
-      const staleImagePath = existingImagePath ?? removedImagePath
+      let imageUrl = existingImageUrl ?? null;
+      let imagePath = existingImagePath ?? null;
+      const staleImagePath = existingImagePath ?? removedImagePath;
 
-      // Upload new image if selected
       if (imageFile) {
-        // Delete old image if replacing
         if (staleImagePath) {
-          await supabase.storage.from('artblog-images').remove([staleImagePath])
+          await supabase.storage.from("artblog-images").remove([staleImagePath]);
         }
-        const uploaded = await uploadImageToStorage(imageFile, 'posts')
-        imageUrl = uploaded.url
-        imagePath = uploaded.path
+        const uploaded = await uploadImageToStorage(imageFile, "posts");
+        imageUrl = uploaded.url;
+        imagePath = uploaded.path;
       } else if (!existingImageUrl && removedImagePath) {
-        // Image was removed
-        await supabase.storage.from('artblog-images').remove([removedImagePath])
-        imageUrl = null
-        imagePath = null
+        await supabase.storage.from("artblog-images").remove([removedImagePath]);
+        imageUrl = null;
+        imagePath = null;
       }
 
       const payload = {
@@ -98,98 +96,69 @@ export default function AdminPostEditor() {
         image_url: imageUrl,
         image_path: imagePath,
         updated_at: new Date().toISOString(),
-      }
+      };
 
       if (isEdit) {
-        const { error: err } = await supabase.from('posts').update(payload).eq('id', id)
-        if (err) throw err
-        navigate(`/post/${id}`)
+        const { error: err } = await supabase.from("posts").update(payload).eq("id", id);
+        if (err) throw err;
+        navigate(`/post/${id}`);
       } else {
-        const { data, error: err } = await supabase.from('posts').insert(payload).select().single()
-        if (err) throw err
-        navigate(`/post/${data.id}`)
+        const { data, error: err } = await supabase.from("posts").insert(payload).select().single();
+        if (err) throw err;
+        navigate(`/post/${data.id}`);
       }
     } catch (err) {
-      setError('저장 중 오류가 발생했습니다: ' + err.message)
+      setError("저장 중 오류가 발생했습니다: " + err.message);
     }
-    setSaving(false)
-  }
+    setSaving(false);
+  };
 
-  const currentImage = imagePreview || existingImageUrl
+  const currentImage = imagePreview || existingImageUrl;
 
   return (
     <div className={styles.page}>
-      <div className={styles.topBar}>
-        <Link to="/admin" className={styles.backBtn}>
-          <ArrowLeft size={16} />
-          <span>대시보드</span>
-        </Link>
-        <h1 className={styles.pageTitle}>{isEdit ? '게시물 수정' : '새 게시물'}</h1>
-        <div className={styles.topActions}>
-          <button
-            type="button"
-            onClick={() => navigate(isEdit ? `/post/${id}` : '/admin')}
-            className="btn-ghost"
-          >
-            취소
-          </button>
-          <button
-            type="button"
-            onClick={handleSubmit}
-            disabled={saving}
-            className="btn-primary"
-          >
-            {saving ? '저장 중...' : isEdit ? '수정 완료' : '게시하기'}
-          </button>
-        </div>
-      </div>
+      <Header />
+      <main className={styles.main}>
+        <div className={styles.eyebrow}>{isEdit ? "editing" : "new post"}</div>
+        <h1 className={styles.title}>{isEdit ? "게시글 수정" : "새 글 쓰기"}</h1>
 
-      <form className={styles.form} onSubmit={handleSubmit}>
-        <div className={styles.layout}>
-          {/* Left: Main content */}
-          <div className={styles.mainCol}>
-            <div className={styles.field}>
-              <label className={styles.label}>제목</label>
-              <input
-                type="text"
-                value={title}
-                onChange={e => setTitle(e.target.value)}
-                className={`input-base ${styles.titleInput}`}
-                placeholder="게시물 제목"
-              />
-            </div>
-
-            <div className={styles.field}>
-              <label className={styles.label}>내용</label>
-              <RichEditor content={content} onChange={setContent} onError={setError} />
-            </div>
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <div className={styles.field}>
+            <label className={styles.label}>제목</label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className={`input-base ${styles.titleInput}`}
+              placeholder="게시물 제목"
+            />
           </div>
 
-          {/* Right: Image upload */}
-          <div className={styles.sideCol}>
-            <div className={styles.field}>
-              <label className={styles.label}>이미지</label>
-
+          <div className={styles.field}>
+            <label className={styles.label}>이미지</label>
+            <div className={styles.imageArea}>
               {currentImage ? (
-                <div className={styles.imagePreviewWrap}>
+                <div className={styles.preview}>
                   <img src={currentImage} alt="preview" className={styles.previewImg} />
                   <button
                     type="button"
                     onClick={imagePreview ? handleRemoveImage : handleRemoveExistingImage}
-                    className={styles.removeImageBtn}
+                    className={styles.removeBtn}
+                    aria-label="이미지 제거"
                   >
                     <X size={14} />
                   </button>
                 </div>
               ) : (
-                <div
+                <button
+                  type="button"
                   className={styles.uploadZone}
                   onClick={() => fileInputRef.current?.click()}
                 >
-                  <ImageIcon size={32} className={styles.uploadIcon} />
-                  <p className={styles.uploadText}>클릭하여 이미지 업로드</p>
-                  <p className={styles.uploadHint}>PNG, JPG, GIF · 최대 10MB</p>
-                </div>
+                  <ImageIcon size={28} className={styles.uploadIcon} />
+                  <span className={styles.uploadText}>클릭하여 이미지 업로드</span>
+                  <span className={styles.uploadHint}>PNG, JPG, GIF · 최대 10MB</span>
+                </button>
               )}
 
               <input
@@ -204,7 +173,7 @@ export default function AdminPostEditor() {
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className={styles.changeImageBtn}
+                  className={styles.changeBtn}
                 >
                   <Upload size={13} />
                   <span>이미지 교체</span>
@@ -212,10 +181,30 @@ export default function AdminPostEditor() {
               )}
             </div>
           </div>
-        </div>
 
-        {error && <p className={styles.error}>{error}</p>}
-      </form>
+          <div className={styles.field}>
+            <label className={styles.label}>본문</label>
+            <div className={styles.editorWrap}>
+              <RichEditor content={content} onChange={setContent} onError={setError} />
+            </div>
+          </div>
+
+          {error && <p className={styles.error}>{error}</p>}
+
+          <div className={styles.submitRow}>
+            <button
+              type="button"
+              onClick={() => navigate(isEdit ? `/post/${id}` : "/admin")}
+              className="btn-ghost"
+            >
+              취소
+            </button>
+            <button type="submit" disabled={saving} className="btn-primary">
+              {saving ? "저장 중..." : isEdit ? "수정 저장" : "게시하기"}
+            </button>
+          </div>
+        </form>
+      </main>
     </div>
-  )
+  );
 }

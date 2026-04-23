@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../hooks/useAuth";
-import { Plus, Edit2, Trash2, MessageCircle, LogOut, FileText } from "lucide-react";
+import Header from "../components/common/Header";
 import styles from "./AdminDashboard.module.css";
 
-function timeFormat(dateStr) {
-  return new Date(dateStr).toLocaleDateString("ko-KR", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
+function formatDate(dateStr) {
+  const date = new Date(dateStr);
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const dd = String(date.getDate()).padStart(2, "0");
+  return `${yyyy}.${mm}.${dd}`;
 }
 
 export default function AdminDashboard() {
@@ -24,7 +24,10 @@ export default function AdminDashboard() {
   }, []);
 
   const fetchPosts = async () => {
-    const { data } = await supabase.from("posts").select("id, title, image_url, image_path, created_at, comments(count)").order("created_at", { ascending: false });
+    const { data } = await supabase
+      .from("posts")
+      .select("id, title, image_url, image_path, created_at, comments(count)")
+      .order("created_at", { ascending: false });
 
     if (data) {
       setPosts(
@@ -48,37 +51,21 @@ export default function AdminDashboard() {
 
   return (
     <div className={styles.page}>
-      <aside className={styles.sidebar}>
-        <Link to="/" className={styles.sidebarLogo}>
-          <span className={styles.logoText}>Artblog</span>
-          <span className={styles.logoDot}>·</span>
-        </Link>
-        <nav className={styles.sidebarNav}>
-          <Link to="/admin/site-settings" className={styles.sidebarLink}>
-            <FileText size={16} />
-            <span>사이트 설정</span>
-          </Link>
-          <Link to="/admin/new" className={styles.sidebarLinkAccent}>
-            <Plus size={16} />
-            <span>새 게시물</span>
-          </Link>
-        </nav>
-        <button
-          onClick={async () => {
-            await signOut();
-            navigate("/");
-          }}
-          className={styles.signOutBtn}
-        >
-          <LogOut size={14} />
-          <span>로그아웃</span>
-        </button>
-      </aside>
-
+      <Header />
       <main className={styles.main}>
         <div className={styles.topBar}>
-          <h1 className={styles.heading}>게시물 관리</h1>
-          <span className={styles.postCount}>{posts.length}개</span>
+          <div>
+            <div className={styles.eyebrow}>admin dashboard</div>
+            <h1 className={styles.title}>작업실 관리</h1>
+          </div>
+          <div className={styles.actions}>
+            <Link to="/admin/site-settings" className="btn-ghost">
+              사이트 설정
+            </Link>
+            <Link to="/admin/new" className="btn-primary">
+              + 새 글 쓰기
+            </Link>
+          </div>
         </div>
 
         {loading ? (
@@ -92,38 +79,52 @@ export default function AdminDashboard() {
           </div>
         ) : (
           <div className={styles.table}>
-            <div className={styles.tableHeader}>
-              <span>이미지</span>
-              <span>제목</span>
-              <span>댓글</span>
-              <span>날짜</span>
-              <span>관리</span>
-            </div>
-            {posts.map((post) => (
-              <div key={post.id} className={styles.tableRow}>
-                <div className={styles.thumb}>{post.image_url ? <img src={post.image_url} alt="" className={styles.thumbImg} /> : <div className={styles.thumbEmpty} />}</div>
-                <div className={styles.postTitle}>
+            {posts.map((post, i) => (
+              <div key={post.id} className={styles.row} data-first={i === 0 || undefined}>
+                <div className={styles.thumb}>
+                  {post.image_url ? (
+                    <img src={post.image_url} alt="" className={styles.thumbImg} />
+                  ) : (
+                    <div className={styles.thumbEmpty} />
+                  )}
+                </div>
+
+                <div className={styles.titleCol}>
                   <Link to={`/post/${post.id}`} className={styles.titleLink}>
                     {post.title}
                   </Link>
+                  <div className={styles.meta}>{post.comment_count} 댓글</div>
                 </div>
-                <div className={styles.commentCount}>
-                  <MessageCircle size={13} />
-                  {post.comment_count}
-                </div>
-                <div className={styles.date}>{timeFormat(post.created_at)}</div>
-                <div className={styles.actions}>
-                  <Link to={`/admin/edit/${post.id}`} className={styles.editBtn} title="수정">
-                    <Edit2 size={14} />
+
+                <div className={styles.date}>{formatDate(post.created_at)}</div>
+
+                <div className={styles.rowActions}>
+                  <Link to={`/post/${post.id}`} className="btn-ghost">
+                    보기
                   </Link>
-                  <button onClick={() => handleDelete(post)} className={styles.deleteBtn} title="삭제">
-                    <Trash2 size={14} />
+                  <Link to={`/admin/edit/${post.id}`} className="btn-ghost">
+                    수정
+                  </Link>
+                  <button onClick={() => handleDelete(post)} className="btn-danger">
+                    삭제
                   </button>
                 </div>
               </div>
             ))}
           </div>
         )}
+
+        <div className={styles.footerActions}>
+          <button
+            onClick={async () => {
+              await signOut();
+              navigate("/");
+            }}
+            className="btn-ghost"
+          >
+            로그아웃
+          </button>
+        </div>
       </main>
     </div>
   );

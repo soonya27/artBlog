@@ -1,260 +1,64 @@
-/* ── Gallery variant (Pinterest-style masonry) ── */
-
-.galleryCard {
-  display: block;
-  break-inside: avoid;
-  margin-bottom: 12px;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.28s ease, box-shadow 0.28s ease;
-}
-
-.galleryCard:hover {
-  transform: translateY(-3px);
-  box-shadow: rgba(0, 0, 0, 0.12) 0px 8px 32px;
-}
-
-.galleryImageWrap {
-  position: relative;
-  overflow: hidden;
-  background: var(--bg-muted);
-}
-
-.galleryImage {
-  display: block;
-  width: 100%;
-  height: auto;
-  transition: transform 0.5s cubic-bezier(0.2, 0.3, 0.25, 0.9);
-}
-
-.galleryCard:hover .galleryImage {
-  transform: scale(1.04);
-}
-
-.galleryNoImage {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  aspect-ratio: 4 / 5;
-  color: var(--text-muted);
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-}
-
-.galleryOverlay {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: flex-end;
-  background: linear-gradient(to top, rgba(20, 20, 19, 0.72) 0%, rgba(20, 20, 19, 0.2) 40%, transparent 70%);
-  opacity: 0;
-  transition: opacity 0.28s ease;
-}
-
-.galleryCard:hover .galleryOverlay {
-  opacity: 1;
-}
-
-.galleryOverlayContent {
-  width: 100%;
-  padding: 14px 14px 16px;
-}
-
-.galleryDate {
-  font-size: 10px;
-  color: rgba(250, 249, 245, 0.65);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  margin-bottom: 5px;
-  font-weight: 500;
-}
-
-.galleryTitle {
-  font-family: var(--font-display);
-  font-size: 18px;
-  font-weight: 500;
-  color: #faf9f5;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
-}
-
-.galleryComments {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  margin-top: 8px;
-  font-size: 10px;
-  color: rgba(250, 249, 245, 0.65);
-  font-weight: 500;
-}
-
-/* ── Default / Featured / Compact variants ── */
-
 .card {
-  display: grid;
-  gap: 0;
-  position: relative;
+  display: block;
+  overflow: hidden;
+  margin-bottom: 20px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  break-inside: avoid;
   cursor: pointer;
-  overflow: visible;
-  background: transparent;
-  border: none;
-  transition: opacity 0.32s ease, transform 0.32s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .card:hover {
-  opacity: 0.98;
-  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+  transform: translateY(-3px);
 }
 
 .imageWrap {
-  position: relative;
+  display: block;
   overflow: hidden;
-  aspect-ratio: 4 / 5;
-  background: var(--bg-muted);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-soft);
-}
-
-.featured .imageWrap {
-  aspect-ratio: 16 / 10;
-}
-
-.compact .imageWrap {
-  aspect-ratio: 16 / 10;
+  background: var(--surface-2);
 }
 
 .image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.2, 0.3, 0.25, 0.9);
   display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
 }
 
 .noImage {
-  width: 100%;
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-muted);
+  aspect-ratio: 4 / 5;
+  font-family: var(--font-ui);
   font-size: 11px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
+  color: var(--ink-3);
 }
 
-.overlay {
-  position: absolute;
-  inset: auto 0 0 0;
-  display: flex;
-  align-items: flex-end;
-  background: linear-gradient(180deg, rgba(245, 244, 237, 0) 0%, rgba(245, 244, 237, 0.18) 16%, rgba(245, 244, 237, 0.95) 40%, rgba(245, 244, 237, 0.97) 100%);
-  opacity: 1;
-  transition: opacity 0.32s ease;
-}
-
-.card:hover .overlay {
-  opacity: 0.95;
-}
-
-.overlayContent {
-  width: 100%;
-  padding: 18px 20px 20px;
-  min-height: 130px;
-}
-
-.featured .overlayContent {
-  padding: 22px 24px 24px;
-  min-height: 164px;
-}
-
-.date {
-  color: var(--text-muted);
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-  font-weight: 500;
+.body {
+  padding: 14px 16px 16px;
 }
 
 .title {
+  margin-bottom: 6px;
   font-family: var(--font-display);
-  font-size: 28px;
+  font-size: 17px;
   font-weight: 500;
-  letter-spacing: -0.02em;
-  color: var(--text-primary);
-  line-height: 1;
-}
-
-.featured .title {
-  font-size: clamp(42px, 5vw, 74px);
-  max-width: 620px;
-  line-height: 0.94;
-}
-
-.compact .title {
-  font-size: 22px;
-}
-
-.excerpt {
-  margin-top: 10px;
-  max-width: 52ch;
-  font-size: 14px;
-  line-height: 1.7;
-  color: var(--text-secondary);
-  font-weight: 400;
-}
-
-.compact .excerpt {
-  display: none;
+  line-height: 1.3;
+  color: var(--ink);
 }
 
 .meta {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  margin-top: 14px;
-}
-
-.commentCount {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  font-family: var(--font-ui);
   font-size: 11px;
-  color: var(--text-secondary);
-  font-weight: 500;
-  letter-spacing: 0.08em;
-}
-
-.card:hover .image {
-  transform: scale(1.03);
-}
-
-@media (max-width: 768px) {
-  .title {
-    font-size: 24px;
-  }
-
-  .featured .title {
-    font-size: clamp(30px, 8vw, 46px);
-  }
-
-  .overlayContent {
-    padding: 16px;
-    min-height: 118px;
-  }
-
-  .featured .overlayContent {
-    padding: 20px;
-    min-height: 144px;
-  }
-
-  .galleryCard {
-    margin-bottom: 8px;
-  }
-
-  .galleryTitle {
-    font-size: 15px;
-  }
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
 }

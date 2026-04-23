@@ -1,6 +1,5 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
-import { LogOut, Settings } from "lucide-react";
 import styles from "./Header.module.css";
 
 export default function Header() {
@@ -14,35 +13,47 @@ export default function Header() {
 
   return (
     <header className={styles.header}>
-      <Link to="/" className={styles.logo}>
-        <span className={styles.logoText}>Artblog</span>
-        <span className={styles.logoDot}>·</span>
+      <Link to="/artworks" className={styles.brand}>
+        <span className={styles.brandName}>artblog</span>
+        <span className={styles.brandTagline}>an atelier journal</span>
       </Link>
+
       <nav className={styles.nav}>
-        <div className={styles.mainNav}>
-          <NavLink to="/artworks" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`}>
-            Artworks
-          </NavLink>
-          <NavLink to="/about" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`}>
-            About
-          </NavLink>
-          <NavLink to="/contact" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`}>
-            Contact
-          </NavLink>
-        </div>
+        <NavLink
+          to="/artworks"
+          className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`}
+        >
+          Home
+        </NavLink>
+        <NavLink
+          to="/about"
+          className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`}
+        >
+          About
+        </NavLink>
+        <NavLink
+          to="/contact"
+          className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`}
+        >
+          Contact
+        </NavLink>
+
+        <span className={styles.navDivider} />
 
         {user ? (
           <>
-            <Link to="/admin" className={styles.navLink}>
-              <Settings size={15} />
-              <span>관리</span>
+            <Link to="/admin" className="btn-ghost">
+              관리
             </Link>
-            <button onClick={handleSignOut} className={`${styles.navLink} ${styles.logoutBtn}`}>
-              <LogOut size={15} />
-              <span>로그아웃</span>
+            <button onClick={handleSignOut} className="btn-ghost">
+              로그아웃
             </button>
           </>
-        ) : null}
+        ) : (
+          <Link to="/admin/login" className="btn-ghost">
+            로그인
+          </Link>
+        )}
       </nav>
     </header>
   );

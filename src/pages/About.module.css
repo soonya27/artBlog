@@ -1,116 +1,135 @@
 .page {
   min-height: 100vh;
-  background:
-    radial-gradient(circle at top left, rgba(143, 107, 72, 0.08), transparent 32%),
-    linear-gradient(180deg, rgba(255, 251, 245, 0.56), transparent 24%),
-    var(--bg-page);
+  background: var(--bg);
 }
 
 .main {
-  max-width: 1120px;
+  max-width: 880px;
   margin: 0 auto;
-  padding: 72px 32px 120px;
+  padding: 36px 48px 80px;
 }
 
 .hero {
-  max-width: 720px;
-  margin-bottom: 56px;
+  margin-bottom: 36px;
 }
 
 .eyebrow {
-  color: var(--accent);
+  margin-bottom: 8px;
+  font-family: var(--font-ui);
   font-size: 11px;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  margin-bottom: 18px;
-  font-weight: 500;
+  color: var(--ink-3);
 }
 
 .title {
+  margin: 0 0 16px;
   font-family: var(--font-display);
-  font-size: clamp(54px, 8vw, 108px);
-  line-height: 0.92;
-  font-weight: 500;
-  letter-spacing: -0.03em;
-  color: var(--text-primary);
+  font-size: 46px;
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--ink);
 }
 
 .subtitle {
-  margin-top: 24px;
-  max-width: 540px;
-  color: var(--text-secondary);
-  font-size: 16px;
-  line-height: 1.9;
+  max-width: 620px;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--ink-2);
 }
 
 .contentSection {
-  border-top: 1px solid var(--border);
   padding-top: 32px;
+  border-top: 1px solid var(--rule);
 }
 
 .content {
-  max-width: 760px;
+  max-width: 720px;
+  font-family: var(--font-body);
   font-size: 16px;
-  line-height: 1.95;
-  color: var(--text-primary);
+  line-height: 1.85;
+  color: var(--ink-2);
 }
 
 .content :global(p) {
-  margin-bottom: 20px;
-  color: var(--text-secondary);
+  margin-bottom: 18px;
 }
 
-.content :global(h2),
-.content :global(h3) {
+.content :global(h2) {
+  margin: 36px 0 14px;
   font-family: var(--font-display);
-  font-weight: 400;
-  color: var(--text-primary);
-  margin: 40px 0 16px;
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.content :global(h3) {
+  margin: 28px 0 12px;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--ink);
 }
 
 .content :global(ul),
 .content :global(ol) {
-  margin: 0 0 20px 20px;
-  color: var(--text-secondary);
+  margin: 0 0 18px 22px;
+}
+
+.content :global(li) {
+  margin-bottom: 6px;
+}
+
+.content :global(a) {
+  border-bottom: 1px solid var(--accent);
+  color: var(--accent);
+}
+
+.content :global(blockquote) {
+  margin: 20px 0;
+  padding-left: 16px;
+  border-left: 3px solid var(--accent);
+  font-style: italic;
+  color: var(--ink-3);
+}
+
+.content :global(img) {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 16px 0;
+  border-radius: var(--radius);
 }
 
 .loading {
-  color: var(--text-muted);
+  font-family: var(--font-ui);
   font-size: 14px;
+  color: var(--ink-3);
 }
 
 @media (max-width: 768px) {
   .main {
-    padding: 48px 20px 80px;
+    padding: 28px 24px 60px;
   }
 
-  .hero {
-    margin-bottom: 48px;
+  .title {
+    font-size: 36px;
   }
 
-  .subtitle,
-  .content {
+  .subtitle {
     font-size: 16px;
   }
 }
 
 @media (max-width: 480px) {
   .main {
-    padding: 36px 16px 60px;
-  }
-}
-
-@media (max-width: 360px) {
-  .main {
-    padding: 28px 12px 60px;
+    padding: 24px 16px 60px;
   }
 
   .title {
-    font-size: clamp(40px, 11vw, 54px);
-  }
-
-  .subtitle,
-  .content {
-    font-size: 15px;
+    font-size: 30px;
   }
 }

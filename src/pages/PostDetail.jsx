@@ -4,8 +4,15 @@ import { supabase } from "../lib/supabase";
 import { useAuth } from "../hooks/useAuth";
 import Header from "../components/common/Header";
 import CommentSection from "../components/public/CommentSection";
-import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
 import styles from "./PostDetail.module.css";
+
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const dd = String(date.getDate()).padStart(2, "0");
+  return `${yyyy}.${mm}.${dd}`;
+}
 
 export default function PostDetail() {
   const { id } = useParams();
@@ -40,53 +47,63 @@ export default function PostDetail() {
     navigate("/artworks");
   };
 
-  if (loading)
+  if (loading) {
     return (
-      <div className={styles.loading}>
+      <div className={styles.page}>
         <Header />
-        Loading...
+        <div className={styles.loading}>Loading...</div>
       </div>
     );
-  if (!post)
+  }
+
+  if (!post) {
     return (
-      <div className={styles.loading}>
+      <div className={styles.page}>
         <Header />
-        <p>게시물을 찾을 수 없습니다.</p>
+        <div className={styles.loading}>게시물을 찾을 수 없습니다.</div>
       </div>
     );
+  }
 
   return (
     <div className={styles.page}>
       <Header />
       <main className={styles.main}>
-        <div className={styles.topBar}>
-          <Link to="/artworks" className={styles.back}>
-            <ArrowLeft size={16} />
-          </Link>
-          {user && (
-            <div className={styles.actions}>
-              <Link to={`/admin/edit/${id}`} className={`btn-ghost ${styles.actionBtn}`}>
-                <Pencil size={14} /> 수정
-              </Link>
-              <button onClick={handleDelete} className={`btn-ghost ${styles.actionBtn} ${styles.danger}`}>
-                <Trash2 size={14} /> 삭제
-              </button>
-            </div>
-          )}
-        </div>
+        <Link to="/artworks" className={styles.back}>
+          ← back to feed
+        </Link>
 
-        <article className={styles.article}>
-          {post.image_url && (
-            <div className={styles.imageWrap}>
-              <img src={post.image_url} alt={post.title} className={styles.image} />
-            </div>
-          )}
-          <div className={styles.content}>
-            <h1 className={styles.title}>{post.title}</h1>
-            <p className={styles.date}>{new Date(post.created_at).toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" })}</p>
-            {post.content && <div className={styles.body} dangerouslySetInnerHTML={{ __html: post.content }} />}
+        <header className={styles.articleHeader}>
+          <div className={styles.metaDate}>{formatDate(post.created_at)}</div>
+          <h1 className={styles.title}>{post.title}</h1>
+        </header>
+
+        {post.image_url && (
+          <div className={styles.gallery}>
+            <img src={post.image_url} alt={post.title} className={styles.galleryImage} />
           </div>
-        </article>
+        )}
+
+        {post.content && (
+          <div
+            className={styles.body}
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
+        )}
+
+        {user && (
+          <div className={styles.adminBar}>
+            <span className={styles.adminLabel}>admin</span>
+            <Link to={`/admin/edit/${id}`} className="btn-ghost">
+              게시글 수정
+            </Link>
+            <button onClick={handleDelete} className="btn-danger">
+              삭제
+            </button>
+          </div>
+        )}
+
+        <hr className={styles.divider} />
 
         <CommentSection postId={id} comments={comments} onCommentChange={fetchComments} />
       </main>

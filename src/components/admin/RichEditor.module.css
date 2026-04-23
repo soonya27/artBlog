@@ -33,7 +33,7 @@
 
 .toolbarBtn.active {
   background: var(--accent);
-  color: #0e0e0e;
+  color: var(--surface);
 }
 
 .hiddenInput {
