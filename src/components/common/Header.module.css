@@ -64,6 +64,26 @@
   width: 14px;
 }
 
+.iconLink {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: var(--radius);
+  background: transparent;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.iconLink:hover {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
 @media (max-width: 768px) {
   .header {
     padding: 24px 24px 16px;
@@ -80,6 +100,10 @@
   .navLink {
     margin: 0 6px;
     font-size: 12px;
+  }
+
+  .iconLink {
+    padding: 6px 8px;
   }
 }
 
@@ -100,7 +124,7 @@
 
   .nav {
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 2px;
   }
 
   .navLink {
@@ -110,6 +134,20 @@
 
   .navDivider {
     width: 8px;
+  }
+
+  .iconLink {
+    padding: 6px 8px;
+  }
+
+  .iconLink span {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .logoutBtn {
+    display: none;
   }
 }
 

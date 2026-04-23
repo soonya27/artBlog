@@ -123,10 +123,6 @@ export default function AdminSiteSettings() {
                 />
               </label>
 
-              <div className={styles.notice}>
-                EmailJS 템플릿의 `To Email` 필드에 `{"{{contact_email}}"}`를 넣어두면, 여기서 저장한 주소로 실제 메일이 발송됩니다.
-              </div>
-
               <label className={styles.field}>
                 <span className={styles.label}>문의 안내 문구</span>
                 <textarea

@@ -106,17 +106,6 @@
   color: var(--ink-3);
 }
 
-.notice {
-  padding: 14px 16px;
-  border: 1px dashed var(--rule);
-  border-radius: var(--radius);
-  background: var(--surface-2);
-  font-family: var(--font-body);
-  font-size: 13px;
-  line-height: 1.7;
-  color: var(--ink-2);
-}
-
 .textarea {
   min-height: 120px;
   line-height: 1.7;

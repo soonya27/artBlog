@@ -83,92 +83,78 @@ export default function Contact() {
           <div className={styles.eyebrow}>contact</div>
           <h1 className={styles.title}>편지를 보내주세요.</h1>
           <p className={styles.subtitle}>{settings.contact_intro}</p>
+          {settings.contact_email && (
+            <div className={styles.recipient}>
+              <span className={styles.recipientLabel}>to</span>
+              <span className={styles.recipientValue}>{settings.contact_email}</span>
+            </div>
+          )}
         </section>
 
         {loading ? (
           <div className={styles.loading}>불러오는 중...</div>
         ) : (
-          <section className={styles.grid}>
-            <form className={styles.form} onSubmit={submitForm}>
-              <div className={styles.row}>
-                <div className={styles.field}>
-                  <label className={styles.label}>이름</label>
-                  <input
-                    className="input-base"
-                    type="text"
-                    name="name"
-                    value={form.name}
-                    onChange={handleChange}
-                    placeholder="이름 또는 브랜드명"
-                  />
-                </div>
-                <div className={styles.field}>
-                  <label className={styles.label}>이메일</label>
-                  <input
-                    className="input-base"
-                    type="email"
-                    name="email"
-                    value={form.email}
-                    onChange={handleChange}
-                    placeholder="you@example.com"
-                    required
-                  />
-                </div>
-              </div>
-
+          <form className={styles.form} onSubmit={submitForm}>
+            <div className={styles.row}>
               <div className={styles.field}>
-                <label className={styles.label}>제목</label>
+                <label className={styles.label}>이름</label>
                 <input
                   className="input-base"
                   type="text"
-                  name="subject"
-                  value={form.subject}
+                  name="name"
+                  value={form.name}
                   onChange={handleChange}
-                  placeholder="간단한 제목 (선택)"
+                  placeholder="이름 또는 브랜드명"
                 />
               </div>
-
               <div className={styles.field}>
-                <label className={styles.label}>메시지</label>
-                <textarea
-                  className={`input-base ${styles.textarea}`}
-                  name="message"
-                  value={form.message}
+                <label className={styles.label}>이메일</label>
+                <input
+                  className="input-base"
+                  type="email"
+                  name="email"
+                  value={form.email}
                   onChange={handleChange}
-                  placeholder="하고 싶은 말을 편하게 적어주세요."
+                  placeholder="you@example.com"
                   required
                 />
               </div>
+            </div>
 
-              {error && <p className={styles.error}>{error}</p>}
-              {success && <p className={styles.success}>{success}</p>}
+            <div className={styles.field}>
+              <label className={styles.label}>제목</label>
+              <input
+                className="input-base"
+                type="text"
+                name="subject"
+                value={form.subject}
+                onChange={handleChange}
+                placeholder="간단한 제목 (선택)"
+              />
+            </div>
 
-              <div className={styles.submitRow}>
-                <span className={styles.privacy}>이메일은 답장 외에는 사용되지 않습니다.</span>
-                <button type="submit" disabled={sending} className="btn-primary">
-                  {sending ? "전송 중..." : "편지 부치기 ✉"}
-                </button>
-              </div>
-            </form>
+            <div className={styles.field}>
+              <label className={styles.label}>메시지</label>
+              <textarea
+                className={`input-base ${styles.textarea}`}
+                name="message"
+                value={form.message}
+                onChange={handleChange}
+                placeholder="하고 싶은 말을 편하게 적어주세요."
+                required
+              />
+            </div>
 
-            <aside className={styles.side}>
-              {settings.contact_email && (
-                <div className={styles.sideCard}>
-                  <div className={styles.sideLabel}>email</div>
-                  <div className={styles.sideValue}>{settings.contact_email}</div>
-                  <div className={styles.sideHint}>직접 보내고 싶다면</div>
-                </div>
-              )}
-              <div className={styles.sideCard}>
-                <div className={styles.sideLabel}>reply time</div>
-                <div className={styles.sideValue}>보통 2–3일</div>
-                <div className={styles.sideHint}>주말은 조금 느려요</div>
-              </div>
-              <div className={styles.sideNote}>
-                ✏︎ 의뢰를 보내실 때는, 원하시는 분위기의 이미지 링크나 설명을 함께 주시면 답변이 빠릅니다.
-              </div>
-            </aside>
-          </section>
+            {error && <p className={styles.error}>{error}</p>}
+            {success && <p className={styles.success}>{success}</p>}
+
+            <div className={styles.submitRow}>
+              <span className={styles.privacy}>이메일은 답장 외에는 사용되지 않습니다.</span>
+              <button type="submit" disabled={sending} className="btn-primary">
+                {sending ? "전송 중..." : "편지 부치기 ✉"}
+              </button>
+            </div>
+          </form>
         )}
       </main>
     </div>

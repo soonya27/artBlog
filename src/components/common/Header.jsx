@@ -1,5 +1,6 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
+import { LogOut, Settings } from "lucide-react";
 import styles from "./Header.module.css";
 
 export default function Header() {
@@ -38,21 +39,21 @@ export default function Header() {
           Contact
         </NavLink>
 
-        <span className={styles.navDivider} />
-
-        {user ? (
+        {user && (
           <>
-            <Link to="/admin" className="btn-ghost">
-              관리
+            <span className={styles.navDivider} />
+            <Link to="/admin" className={styles.iconLink}>
+              <Settings size={15} />
+              <span>관리</span>
             </Link>
-            <button onClick={handleSignOut} className="btn-ghost">
-              로그아웃
+            <button
+              onClick={handleSignOut}
+              className={`${styles.iconLink} ${styles.logoutBtn}`}
+            >
+              <LogOut size={15} />
+              <span>로그아웃</span>
             </button>
           </>
-        ) : (
-          <Link to="/admin/login" className="btn-ghost">
-            로그인
-          </Link>
         )}
       </nav>
     </header>

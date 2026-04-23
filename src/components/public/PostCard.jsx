@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { MessageCircle } from "lucide-react";
 import styles from "./PostCard.module.css";
 
 function formatDate(dateString) {
@@ -23,7 +24,10 @@ export default function PostCard({ post }) {
         <div className={styles.title}>{post.title}</div>
         <div className={styles.meta}>
           <span>{formatDate(post.created_at)}</span>
-          <span>{post.comment_count ?? 0} comments</span>
+          <span className={styles.comments}>
+            <MessageCircle size={12} />
+            {post.comment_count ?? 0}
+          </span>
         </div>
       </div>
     </Link>

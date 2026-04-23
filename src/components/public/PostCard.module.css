@@ -62,3 +62,9 @@
   letter-spacing: 0.04em;
   color: var(--ink-3);
 }
+
+.comments {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
