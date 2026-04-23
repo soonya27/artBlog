@@ -20,22 +20,13 @@ export default function Header() {
       </Link>
 
       <nav className={styles.nav}>
-        <NavLink
-          to="/artworks"
-          className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`}
-        >
-          Home
+        <NavLink to="/artworks" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`}>
+          Artworks
         </NavLink>
-        <NavLink
-          to="/about"
-          className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`}
-        >
+        <NavLink to="/about" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`}>
           About
         </NavLink>
-        <NavLink
-          to="/contact"
-          className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`}
-        >
+        <NavLink to="/contact" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`}>
           Contact
         </NavLink>
 
@@ -46,10 +37,7 @@ export default function Header() {
               <Settings size={15} />
               <span>관리</span>
             </Link>
-            <button
-              onClick={handleSignOut}
-              className={`${styles.iconLink} ${styles.logoutBtn}`}
-            >
+            <button onClick={handleSignOut} className={`${styles.iconLink} ${styles.logoutBtn}`}>
               <LogOut size={15} />
               <span>로그아웃</span>
             </button>
