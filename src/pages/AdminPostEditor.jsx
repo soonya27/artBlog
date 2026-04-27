@@ -23,6 +23,7 @@ export default function AdminPostEditor() {
   const [removedImagePath, setRemovedImagePath] = useState(null);
   const [sliderItems, setSliderItems] = useState([]);
   const [removedSliderPaths, setRemovedSliderPaths] = useState([]);
+  const [isHidden, setIsHidden] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
@@ -48,6 +49,7 @@ export default function AdminPostEditor() {
         }))
       );
       setRemovedSliderPaths([]);
+      setIsHidden(Boolean(data.is_hidden));
     }
   };
 
@@ -123,6 +125,7 @@ export default function AdminPostEditor() {
         image_url: imageUrl,
         image_path: imagePath,
         slider_images: sliderPayload,
+        is_hidden: isHidden,
         updated_at: new Date().toISOString(),
       };
 
@@ -212,6 +215,21 @@ export default function AdminPostEditor() {
             <div className={styles.editorWrap}>
               <RichEditor content={content} onChange={setContent} onError={setError} />
             </div>
+          </div>
+
+          <div className={styles.field}>
+            <label className={styles.visibilityRow}>
+              <input
+                type="checkbox"
+                checked={isHidden}
+                onChange={(e) => setIsHidden(e.target.checked)}
+                className={styles.visibilityCheckbox}
+              />
+              <span className={styles.visibilityText}>
+                <span className={styles.visibilityTitle}>비공개 글로 저장</span>
+                <span className={styles.visibilityHint}>메인 목록과 일반 사용자에게 노출되지 않습니다. 관리자만 열람할 수 있어요.</span>
+              </span>
+            </label>
           </div>
 
           {error && <p className={styles.error}>{error}</p>}

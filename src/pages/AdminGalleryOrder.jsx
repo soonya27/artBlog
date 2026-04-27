@@ -76,6 +76,7 @@ export default function AdminGalleryOrder() {
     const { data, error: err } = await supabase
       .from("posts")
       .select("id, title, image_url, created_at, display_order")
+      .eq("is_hidden", false)
       .order("display_order", { ascending: true });
 
     if (err) {

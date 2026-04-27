@@ -115,9 +115,22 @@
 }
 
 .meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
   font-family: var(--font-ui);
   font-size: 11px;
   color: var(--ink-3);
+}
+
+.hiddenBadge {
+  padding: 1px 6px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--surface-2);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--ink-2);
 }
 
 .date {
@@ -129,12 +142,45 @@
 .rowActions {
   display: flex;
   gap: 6px;
+  align-items: center;
   justify-content: flex-end;
 }
 
 .rowActions :global(.btn-ghost) {
   padding: 6px 12px;
   font-size: 12px;
+}
+
+.lockBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.lockBtn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.lockBtnOn {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.lockBtnOn:hover {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--bg);
 }
 
 .footerActions {

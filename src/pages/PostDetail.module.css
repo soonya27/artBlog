@@ -73,12 +73,25 @@
 }
 
 .metaDate {
+  display: flex;
+  gap: 10px;
+  align-items: center;
   margin-bottom: 14px;
   font-family: var(--font-ui);
   font-size: 11px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--ink-3);
+}
+
+.hiddenBadge {
+  padding: 2px 8px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--surface-2);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--ink-2);
 }
 
 .title {

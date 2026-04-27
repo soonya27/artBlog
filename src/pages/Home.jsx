@@ -16,6 +16,7 @@ export default function Home() {
     const { data, error } = await supabase
       .from("posts")
       .select("id, title, image_url, created_at, content")
+      .eq("is_hidden", false)
       .order("display_order", { ascending: true });
 
     if (!error && data) {

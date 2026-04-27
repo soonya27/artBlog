@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Lock, Unlock } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../hooks/useAuth";
 import Header from "../components/common/Header";
@@ -26,7 +27,7 @@ export default function AdminDashboard() {
   const fetchPosts = async () => {
     const { data } = await supabase
       .from("posts")
-      .select("id, title, image_url, image_path, created_at, comments(count)")
+      .select("id, title, image_url, image_path, is_hidden, created_at, comments(count)")
       .order("created_at", { ascending: false });
 
     if (data) {
@@ -47,6 +48,16 @@ export default function AdminDashboard() {
     }
     await supabase.from("posts").delete().eq("id", post.id);
     fetchPosts();
+  };
+
+  const handleToggleHidden = async (post) => {
+    const next = !post.is_hidden;
+    const { error } = await supabase.from("posts").update({ is_hidden: next }).eq("id", post.id);
+    if (error) {
+      alert("비공개 설정 변경 실패: " + error.message);
+      return;
+    }
+    setPosts((prev) => prev.map((p) => (p.id === post.id ? { ...p, is_hidden: next } : p)));
   };
 
   return (
@@ -96,12 +107,25 @@ export default function AdminDashboard() {
                   <Link to={`/post/${post.id}`} className={styles.titleLink}>
                     {post.title}
                   </Link>
-                  <div className={styles.meta}>{post.comment_count} 댓글</div>
+                  <div className={styles.meta}>
+                    {post.is_hidden && <span className={styles.hiddenBadge}>비공개</span>}
+                    <span>{post.comment_count} 댓글</span>
+                  </div>
                 </div>
 
                 <div className={styles.date}>{formatDate(post.created_at)}</div>
 
                 <div className={styles.rowActions}>
+                  <button
+                    type="button"
+                    onClick={() => handleToggleHidden(post)}
+                    className={`${styles.lockBtn} ${post.is_hidden ? styles.lockBtnOn : ""}`}
+                    title={post.is_hidden ? "공개로 전환" : "비공개로 전환"}
+                    aria-label={post.is_hidden ? "공개로 전환" : "비공개로 전환"}
+                    aria-pressed={post.is_hidden}
+                  >
+                    {post.is_hidden ? <Lock size={14} strokeWidth={1.75} /> : <Unlock size={14} strokeWidth={1.75} />}
+                  </button>
                   <Link to={`/admin/edit/${post.id}`} className="btn-ghost">
                     수정
                   </Link>

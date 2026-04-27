@@ -32,14 +32,17 @@ export default function PostDetail() {
   }, [id]);
 
   const fetchPost = async () => {
-    const { data } = await supabase.from("posts").select("*").eq("id", id).single();
+    const { data } = await supabase.from("posts").select("*").eq("id", id).maybeSingle();
     setPost(data);
     setLoading(false);
     if (data) fetchAdjacentPosts(data.created_at);
   };
 
   const fetchAdjacentPosts = async (createdAt) => {
-    const [{ data: prev }, { data: next }] = await Promise.all([supabase.from("posts").select("id, title").lt("created_at", createdAt).order("created_at", { ascending: false }).limit(1).maybeSingle(), supabase.from("posts").select("id, title").gt("created_at", createdAt).order("created_at", { ascending: true }).limit(1).maybeSingle()]);
+    const [{ data: prev }, { data: next }] = await Promise.all([
+      supabase.from("posts").select("id, title").eq("is_hidden", false).lt("created_at", createdAt).order("created_at", { ascending: false }).limit(1).maybeSingle(),
+      supabase.from("posts").select("id, title").eq("is_hidden", false).gt("created_at", createdAt).order("created_at", { ascending: true }).limit(1).maybeSingle(),
+    ]);
     setPrevPost(prev);
     setNextPost(next);
   };
@@ -74,7 +77,7 @@ export default function PostDetail() {
     );
   }
 
-  if (!post) {
+  if (!post || (post.is_hidden && !user)) {
     return (
       <div className={styles.page}>
         <Header />
@@ -98,7 +101,10 @@ export default function PostDetail() {
             </div>
           )}
           <div className={`${styles.heroCaption} ${post.image_url ? styles.heroCaptionWithCover : ""}`}>
-            <div className={styles.metaDate}>{formatDate(post.created_at)}</div>
+            <div className={styles.metaDate}>
+              {formatDate(post.created_at)}
+              {post.is_hidden && user && <span className={styles.hiddenBadge}>비공개</span>}
+            </div>
             <h1 className={styles.title}>{post.title}</h1>
             <div className={styles.heroStats}>
               <MessageCircle size={14} strokeWidth={1.5} aria-hidden="true" />

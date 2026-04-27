@@ -165,6 +165,44 @@
   background: var(--surface);
 }
 
+.visibilityRow {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  cursor: pointer;
+}
+
+.visibilityCheckbox {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.visibilityText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.visibilityTitle {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.visibilityHint {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  color: var(--ink-3);
+}
+
 .error {
   font-family: var(--font-ui);
   font-size: 13px;
