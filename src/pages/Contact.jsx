@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Send } from "lucide-react";
 import Header from "../components/common/Header";
 import { defaultSiteSettings, fetchSiteSettings } from "../lib/siteSettings";
 import { isEmailJsConfigured, sendContactEmail } from "../lib/emailjs";
@@ -80,8 +81,8 @@ export default function Contact() {
       <Header />
       <main className={styles.main}>
         <section className={styles.hero}>
-          <div className={styles.eyebrow}>contact</div>
-          <h1 className={styles.title}>편지를 보내주세요.</h1>
+          {/* <div className={styles.eyebrow}>contact</div> */}
+          <h1 className={styles.title}>Contact Me</h1>
           <p className={styles.subtitle}>{settings.contact_intro}</p>
           {settings.contact_email && (
             <div className={styles.recipient}>
@@ -98,60 +99,32 @@ export default function Contact() {
             <div className={styles.row}>
               <div className={styles.field}>
                 <label className={styles.label}>이름</label>
-                <input
-                  className="input-base"
-                  type="text"
-                  name="name"
-                  value={form.name}
-                  onChange={handleChange}
-                  placeholder="이름 또는 브랜드명"
-                />
+                <input className="input-base" type="text" name="name" value={form.name} onChange={handleChange} placeholder="이름 또는 브랜드명" />
               </div>
               <div className={styles.field}>
                 <label className={styles.label}>이메일</label>
-                <input
-                  className="input-base"
-                  type="email"
-                  name="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  placeholder="you@example.com"
-                  required
-                />
+                <input className="input-base" type="email" name="email" value={form.email} onChange={handleChange} placeholder="you@example.com" required />
               </div>
             </div>
 
             <div className={styles.field}>
               <label className={styles.label}>제목</label>
-              <input
-                className="input-base"
-                type="text"
-                name="subject"
-                value={form.subject}
-                onChange={handleChange}
-                placeholder="간단한 제목 (선택)"
-              />
+              <input className="input-base" type="text" name="subject" value={form.subject} onChange={handleChange} placeholder="제목을 작성해주세요." />
             </div>
 
             <div className={styles.field}>
               <label className={styles.label}>메시지</label>
-              <textarea
-                className={`input-base ${styles.textarea}`}
-                name="message"
-                value={form.message}
-                onChange={handleChange}
-                placeholder="하고 싶은 말을 편하게 적어주세요."
-                required
-              />
+              <textarea className={`input-base ${styles.textarea}`} name="message" value={form.message} onChange={handleChange} placeholder="하고 싶은 말을 편하게 적어주세요." required />
             </div>
 
             {error && <p className={styles.error}>{error}</p>}
             {success && <p className={styles.success}>{success}</p>}
 
             <div className={styles.submitRow}>
-              <span className={styles.privacy}>이메일은 답장 외에는 사용되지 않습니다.</span>
-              <button type="submit" disabled={sending} className="btn-primary">
-                {sending ? "전송 중..." : "편지 부치기 ✉"}
+              {/* <span className={styles.privacy}>이메일은 답장 외에는 사용되지 않습니다.</span> */}
+              <button type="submit" disabled={sending} className={`btn-primary ${styles.submitBtn}`}>
+                <Send size={14} />
+                <span>{sending ? "전송 중..." : "편지 부치기"}</span>
               </button>
             </div>
           </form>

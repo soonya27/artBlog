@@ -102,9 +102,6 @@ export default function AdminDashboard() {
                 <div className={styles.date}>{formatDate(post.created_at)}</div>
 
                 <div className={styles.rowActions}>
-                  <Link to={`/post/${post.id}`} className="btn-ghost">
-                    보기
-                  </Link>
                   <Link to={`/admin/edit/${post.id}`} className="btn-ghost">
                     수정
                   </Link>

@@ -109,11 +109,11 @@ export default function PostDetail() {
 
         {Array.isArray(post.slider_images) && post.slider_images.length > 0 && (
           <section className={styles.gallerySection}>
-            <div className={styles.galleryHeader}>
+            {/* <div className={styles.galleryHeader}>
               <span className={styles.galleryHeading}>Slides</span>
               <hr className={styles.galleryHairline} />
               <span className={styles.gallerySlideCount}>{post.slider_images.length} Images</span>
-            </div>
+            </div> */}
             <PostSlider items={post.slider_images} />
           </section>
         )}
