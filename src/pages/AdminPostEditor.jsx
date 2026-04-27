@@ -131,7 +131,19 @@ export default function AdminPostEditor() {
         if (err) throw err;
         navigate(`/post/${id}`);
       } else {
-        const { data, error: err } = await supabase.from("posts").insert(payload).select().single();
+        const { data: maxRow } = await supabase
+          .from("posts")
+          .select("display_order")
+          .order("display_order", { ascending: false })
+          .limit(1)
+          .maybeSingle();
+        const nextOrder = (maxRow?.display_order ?? 0) + 1;
+
+        const { data, error: err } = await supabase
+          .from("posts")
+          .insert({ ...payload, display_order: nextOrder })
+          .select()
+          .single();
         if (err) throw err;
         navigate(`/post/${data.id}`);
       }

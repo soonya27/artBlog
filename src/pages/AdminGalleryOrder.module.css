@@ -1,0 +1,211 @@
+.page {
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 36px 48px 80px;
+}
+
+.topBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 28px;
+}
+
+.topBar > div:first-child {
+  flex: 1 1 320px;
+  min-width: 0;
+}
+
+.eyebrow {
+  margin-bottom: 6px;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.title {
+  margin: 0 0 8px;
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 400;
+  color: var(--ink);
+}
+
+.desc {
+  max-width: 520px;
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-3);
+}
+
+.actions {
+  display: flex;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.error {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--accent);
+}
+
+.loading,
+.empty {
+  padding: 120px 0;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+  text-align: center;
+}
+
+/* ── Masonry gallery (Home.module.css와 동일) ── */
+.gallery {
+  column-count: 3;
+  column-gap: 20px;
+}
+
+/* ── Card (PostCard.module.css와 동일) ── */
+.card {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 20px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  break-inside: avoid;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-3px);
+}
+
+.card:active {
+  cursor: grabbing;
+}
+
+.card[data-dragging] {
+  border-color: var(--accent);
+  box-shadow: var(--shadow);
+  cursor: grabbing;
+}
+
+.imageWrap {
+  display: block;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+.noImage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 4 / 5;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.body {
+  padding: 14px 16px 16px;
+}
+
+.cardTitle {
+  margin-bottom: 6px;
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+}
+
+.comments {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.footerActions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 28px;
+}
+
+@media (max-width: 960px) {
+  .gallery {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .main {
+    padding: 24px 20px 60px;
+  }
+
+  .topBar {
+    gap: 12px;
+  }
+
+  .title {
+    font-size: 26px;
+  }
+}
+
+@media (max-width: 640px) {
+  .gallery {
+    column-count: 2;
+    column-gap: 12px;
+  }
+}
+
+@media (max-width: 420px) {
+  .gallery {
+    column-count: 1;
+  }
+}

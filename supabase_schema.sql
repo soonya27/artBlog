@@ -11,6 +11,7 @@ create table if not exists posts (
   image_url text,
   image_path text,
   slider_images jsonb not null default '[]'::jsonb,
+  display_order integer not null default 0,
   created_at timestamp with time zone default now(),
   updated_at timestamp with time zone default now()
 );
@@ -18,6 +19,8 @@ create table if not exists posts (
 -- 기존 테이블에 slider_images 컬럼 추가 (이미 운영 중인 경우)
 alter table posts
   add column if not exists slider_images jsonb not null default '[]'::jsonb;
+
+-- 기존 테이블에 display_order 컬럼 추가는 supabase_migration_display_order.sql 참고
 
 -- 2. Comments 테이블
 create table if not exists comments (

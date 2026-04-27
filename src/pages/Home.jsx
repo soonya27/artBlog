@@ -13,7 +13,10 @@ export default function Home() {
   }, []);
 
   const fetchPosts = async () => {
-    const { data, error } = await supabase.from("posts").select("id, title, image_url, created_at, content").order("created_at", { ascending: false });
+    const { data, error } = await supabase
+      .from("posts")
+      .select("id, title, image_url, created_at, content")
+      .order("display_order", { ascending: true });
 
     if (!error && data) {
       const postsWithCounts = await Promise.all(

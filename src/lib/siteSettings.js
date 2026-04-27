@@ -1,7 +1,7 @@
 import { supabase } from "./supabase";
 
 export const defaultSiteSettings = {
-  artist_name: "Your Name",
+  artist_name: "",
   about_title: "작업과 생각을 소개하는 공간",
   about_content: `
     <p>이 페이지는 작가 소개와 작업 세계를 보여주는 소개 페이지입니다.</p>

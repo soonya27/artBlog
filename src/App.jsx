@@ -8,6 +8,7 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminPostEditor from "./pages/AdminPostEditor";
 import AdminSiteSettings from "./pages/AdminSiteSettings";
+import AdminGalleryOrder from "./pages/AdminGalleryOrder";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import "./styles/global.css";
 
@@ -51,6 +52,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <AdminSiteSettings />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/gallery-order"
+            element={
+              <ProtectedRoute>
+                <AdminGalleryOrder />
               </ProtectedRoute>
             }
           />

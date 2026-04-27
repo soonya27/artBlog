@@ -220,6 +220,11 @@
   font-size: 12px;
 }
 
+.adminBar :global(.btn-danger) {
+  padding: 9px 17px;
+  font-size: 13px;
+}
+
 .adminLabel {
   font-size: 11px;
   letter-spacing: 0.15em;

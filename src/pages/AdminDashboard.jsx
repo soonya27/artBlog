@@ -59,6 +59,9 @@ export default function AdminDashboard() {
             <h1 className={styles.title}>작업실 관리</h1>
           </div>
           <div className={styles.actions}>
+            <Link to="/admin/gallery-order" className="btn-ghost">
+              메인페이지 수정
+            </Link>
             <Link to="/admin/site-settings" className="btn-ghost">
               사이트 설정
             </Link>
