@@ -22,49 +22,56 @@ export default function PostSlider({ items }) {
 
   return (
     <div className={styles.wrap}>
-      <div className={styles.stage}>
-        <img src={current.url} alt={current.caption ?? ""} className={styles.image} />
+      <div className={styles.card}>
+        <div className={styles.stage}>
+          <img src={current.url} alt={current.caption ?? ""} className={styles.image} />
 
-        {items.length > 1 && (
-          <>
-            <button
-              type="button"
-              onClick={() => setIndex((i) => i - 1)}
-              disabled={!hasPrev}
-              className={`${styles.navBtn} ${styles.navPrev}`}
-              aria-label="이전 이미지"
-            >
-              <ChevronLeft size={20} />
-            </button>
-            <button
-              type="button"
-              onClick={() => setIndex((i) => i + 1)}
-              disabled={!hasNext}
-              className={`${styles.navBtn} ${styles.navNext}`}
-              aria-label="다음 이미지"
-            >
-              <ChevronRight size={20} />
-            </button>
-          </>
+          {items.length > 1 && (
+            <>
+              <button
+                type="button"
+                onClick={() => setIndex((i) => i - 1)}
+                disabled={!hasPrev}
+                className={`${styles.navBtn} ${styles.navPrev}`}
+                aria-label="이전 이미지"
+              >
+                <ChevronLeft size={20} />
+              </button>
+              <button
+                type="button"
+                onClick={() => setIndex((i) => i + 1)}
+                disabled={!hasNext}
+                className={`${styles.navBtn} ${styles.navNext}`}
+                aria-label="다음 이미지"
+              >
+                <ChevronRight size={20} />
+              </button>
+            </>
+          )}
+        </div>
+
+        {current.caption && (
+          <div className={styles.caption}>
+            <span className={styles.captionIndex}>
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <span className={styles.captionText}>{current.caption}</span>
+          </div>
         )}
       </div>
 
-      {current.caption && <p className={styles.caption}>{current.caption}</p>}
-
       {items.length > 1 && (
-        <div className={styles.dots}>
-          {items.map((_, i) => (
+        <div className={styles.thumbStrip}>
+          {items.map((item, i) => (
             <button
               key={i}
               type="button"
               onClick={() => setIndex(i)}
-              className={`${styles.dot} ${i === index ? styles.dotActive : ""}`}
+              className={`${styles.thumb} ${i === index ? styles.thumbActive : ""}`}
+              style={{ backgroundImage: `url(${item.url})` }}
               aria-label={`${i + 1}번째 이미지`}
             />
           ))}
-          <span className={styles.counter}>
-            {index + 1} / {items.length}
-          </span>
         </div>
       )}
     </div>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
+import { MessageCircle } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../hooks/useAuth";
 import Header from "../components/common/Header";
@@ -38,10 +39,7 @@ export default function PostDetail() {
   };
 
   const fetchAdjacentPosts = async (createdAt) => {
-    const [{ data: prev }, { data: next }] = await Promise.all([
-      supabase.from("posts").select("id, title").lt("created_at", createdAt).order("created_at", { ascending: false }).limit(1).maybeSingle(),
-      supabase.from("posts").select("id, title").gt("created_at", createdAt).order("created_at", { ascending: true }).limit(1).maybeSingle(),
-    ]);
+    const [{ data: prev }, { data: next }] = await Promise.all([supabase.from("posts").select("id, title").lt("created_at", createdAt).order("created_at", { ascending: false }).limit(1).maybeSingle(), supabase.from("posts").select("id, title").gt("created_at", createdAt).order("created_at", { ascending: true }).limit(1).maybeSingle()]);
     setPrevPost(prev);
     setNextPost(next);
   };
@@ -93,27 +91,34 @@ export default function PostDetail() {
           ← back to feed
         </Link>
 
-        <header className={styles.articleHeader}>
-          <div className={styles.metaDate}>{formatDate(post.created_at)}</div>
-          <h1 className={styles.title}>{post.title}</h1>
-        </header>
-
-        {post.image_url && (
-          <div className={styles.gallery}>
-            <img src={post.image_url} alt={post.title} className={styles.galleryImage} />
+        <article className={styles.hero}>
+          {post.image_url && (
+            <div className={styles.heroCover}>
+              <img src={post.image_url} alt={post.title} className={styles.heroCoverImage} />
+            </div>
+          )}
+          <div className={`${styles.heroCaption} ${post.image_url ? styles.heroCaptionWithCover : ""}`}>
+            <div className={styles.metaDate}>{formatDate(post.created_at)}</div>
+            <h1 className={styles.title}>{post.title}</h1>
+            <div className={styles.heroStats}>
+              <MessageCircle size={14} strokeWidth={1.5} aria-hidden="true" />
+              <span>{comments.length}</span>
+            </div>
           </div>
-        )}
+        </article>
 
         {Array.isArray(post.slider_images) && post.slider_images.length > 0 && (
-          <PostSlider items={post.slider_images} />
+          <section className={styles.gallerySection}>
+            <div className={styles.galleryHeader}>
+              <span className={styles.galleryHeading}>Slides</span>
+              <hr className={styles.galleryHairline} />
+              <span className={styles.gallerySlideCount}>{post.slider_images.length} Images</span>
+            </div>
+            <PostSlider items={post.slider_images} />
+          </section>
         )}
 
-        {post.content && (
-          <div
-            className={styles.body}
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
-        )}
+        {post.content && <div className={styles.body} dangerouslySetInnerHTML={{ __html: post.content }} />}
 
         {user && (
           <div className={styles.adminBar}>
@@ -154,7 +159,9 @@ export default function PostDetail() {
 
         <hr className={styles.divider} />
 
-        <CommentSection postId={id} comments={comments} onCommentChange={fetchComments} />
+        <div className={styles.commentsWrap}>
+          <CommentSection postId={id} comments={comments} onCommentChange={fetchComments} />
+        </div>
       </main>
     </div>
   );
