@@ -125,56 +125,31 @@ export default function AdminPostEditor() {
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.field}>
             <label className={styles.label}>제목</label>
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className={`input-base ${styles.titleInput}`}
-              placeholder="게시물 제목"
-            />
+            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className={`input-base ${styles.titleInput}`} placeholder="게시물 제목" />
           </div>
 
           <div className={styles.field}>
-            <label className={styles.label}>이미지</label>
+            <label className={styles.label}>썸네일</label>
             <div className={styles.imageArea}>
               {currentImage ? (
                 <div className={styles.preview}>
                   <img src={currentImage} alt="preview" className={styles.previewImg} />
-                  <button
-                    type="button"
-                    onClick={imagePreview ? handleRemoveImage : handleRemoveExistingImage}
-                    className={styles.removeBtn}
-                    aria-label="이미지 제거"
-                  >
+                  <button type="button" onClick={imagePreview ? handleRemoveImage : handleRemoveExistingImage} className={styles.removeBtn} aria-label="이미지 제거">
                     <X size={14} />
                   </button>
                 </div>
               ) : (
-                <button
-                  type="button"
-                  className={styles.uploadZone}
-                  onClick={() => fileInputRef.current?.click()}
-                >
+                <button type="button" className={styles.uploadZone} onClick={() => fileInputRef.current?.click()}>
                   <ImageIcon size={28} className={styles.uploadIcon} />
                   <span className={styles.uploadText}>클릭하여 이미지 업로드</span>
                   <span className={styles.uploadHint}>PNG, JPG, GIF · 최대 10MB</span>
                 </button>
               )}
 
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handleImageSelect}
-                className={styles.fileInput}
-              />
+              <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageSelect} className={styles.fileInput} />
 
               {currentImage && (
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className={styles.changeBtn}
-                >
+                <button type="button" onClick={() => fileInputRef.current?.click()} className={styles.changeBtn}>
                   <Upload size={13} />
                   <span>이미지 교체</span>
                 </button>
@@ -192,11 +167,7 @@ export default function AdminPostEditor() {
           {error && <p className={styles.error}>{error}</p>}
 
           <div className={styles.submitRow}>
-            <button
-              type="button"
-              onClick={() => navigate(isEdit ? `/post/${id}` : "/admin")}
-              className="btn-ghost"
-            >
+            <button type="button" onClick={() => navigate(isEdit ? `/post/${id}` : "/admin")} className="btn-ghost">
               취소
             </button>
             <button type="submit" disabled={saving} className="btn-primary">

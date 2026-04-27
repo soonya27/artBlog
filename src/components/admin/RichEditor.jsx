@@ -67,22 +67,27 @@ export default function RichEditor({ content, onChange, onError }) {
   }
 
   const handleImageSelect = async (event) => {
-    const file = event.target.files?.[0]
+    const files = Array.from(event.target.files ?? [])
     event.target.value = ''
-    if (!file) return
+    if (files.length === 0) return
 
-    const validationError = validateImageFile(file)
-    if (validationError) {
-      onError?.(validationError)
-      return
+    for (const file of files) {
+      const validationError = validateImageFile(file)
+      if (validationError) {
+        onError?.(`${file.name}: ${validationError}`)
+        return
+      }
     }
 
     setUploadingImage(true)
     onError?.('')
 
     try {
-      const uploaded = await uploadImageToStorage(file, 'editor')
-      editor.chain().focus().setImage({ src: uploaded.url, alt: file.name }).run()
+      for (const file of files) {
+        const uploaded = await uploadImageToStorage(file, 'editor')
+        editor.chain().focus().setImage({ src: uploaded.url, alt: file.name }).run()
+        editor.commands.setTextSelection(editor.state.selection.to)
+      }
     } catch (error) {
       onError?.('본문 이미지 업로드 중 오류가 발생했습니다: ' + error.message)
     } finally {
@@ -150,6 +155,7 @@ export default function RichEditor({ content, onChange, onError }) {
         ref={imageInputRef}
         type="file"
         accept="image/*"
+        multiple
         onChange={handleImageSelect}
         className={styles.hiddenInput}
       />
