@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Lock, Unlock } from "lucide-react";
 import { supabase } from "../lib/supabase";
+import { removeImages } from "../lib/storage";
+import { collectPostImagePaths } from "../lib/postCleanup";
 import { useAuth } from "../hooks/useAuth";
 import Header from "../components/common/Header";
 import styles from "./AdminDashboard.module.css";
@@ -43,9 +45,13 @@ export default function AdminDashboard() {
 
   const handleDelete = async (post) => {
     if (!confirm(`"${post.title}" 을(를) 삭제하시겠습니까?`)) return;
-    if (post.image_path) {
-      await supabase.storage.from("artblog-images").remove([post.image_path]);
-    }
+    const { data: full } = await supabase
+      .from("posts")
+      .select("image_path, slider_images, content")
+      .eq("id", post.id)
+      .maybeSingle();
+    const paths = collectPostImagePaths(full);
+    if (paths.length > 0) await removeImages(paths);
     await supabase.from("posts").delete().eq("id", post.id);
     fetchPosts();
   };

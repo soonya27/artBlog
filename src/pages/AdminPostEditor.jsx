@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
-import { uploadImageToStorage, validateImageFile } from "../lib/storage";
+import { uploadImageToStorage, validateImageFile, removeImages } from "../lib/storage";
 import Header from "../components/common/Header";
 import RichEditor from "../components/admin/RichEditor";
 import SliderEditor from "../components/admin/SliderEditor";
@@ -94,13 +94,13 @@ export default function AdminPostEditor() {
 
       if (imageFile) {
         if (staleImagePath) {
-          await supabase.storage.from("artblog-images").remove([staleImagePath]);
+          await removeImages([staleImagePath]);
         }
         const uploaded = await uploadImageToStorage(imageFile, "posts");
         imageUrl = uploaded.url;
         imagePath = uploaded.path;
       } else if (!existingImageUrl && removedImagePath) {
-        await supabase.storage.from("artblog-images").remove([removedImagePath]);
+        await removeImages([removedImagePath]);
         imageUrl = null;
         imagePath = null;
       }
@@ -116,7 +116,7 @@ export default function AdminPostEditor() {
       }
 
       if (removedSliderPaths.length > 0) {
-        await supabase.storage.from("artblog-images").remove(removedSliderPaths);
+        await removeImages(removedSliderPaths);
       }
 
       const payload = {

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { MessageCircle } from "lucide-react";
 import { supabase } from "../lib/supabase";
+import { removeImages } from "../lib/storage";
+import { collectPostImagePaths } from "../lib/postCleanup";
 import { useAuth } from "../hooks/useAuth";
 import Header from "../components/common/Header";
 import CommentSection from "../components/public/CommentSection";
@@ -54,16 +56,8 @@ export default function PostDetail() {
 
   const handleDelete = async () => {
     if (!window.confirm("이 게시물을 삭제할까요?")) return;
-    const pathsToRemove = [];
-    if (post.image_path) pathsToRemove.push(post.image_path);
-    if (Array.isArray(post.slider_images)) {
-      for (const item of post.slider_images) {
-        if (item?.path) pathsToRemove.push(item.path);
-      }
-    }
-    if (pathsToRemove.length > 0) {
-      await supabase.storage.from("artblog-images").remove(pathsToRemove);
-    }
+    const paths = collectPostImagePaths(post);
+    if (paths.length > 0) await removeImages(paths);
     await supabase.from("posts").delete().eq("id", id);
     navigate("/artworks");
   };
