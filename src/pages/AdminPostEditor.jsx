@@ -47,16 +47,12 @@ export default function AdminPostEditor() {
           url: item.url,
           path: item.path,
           caption: item.caption ?? "",
-        }))
+        })),
       );
       setRemovedSliderPaths([]);
       setIsHidden(Boolean(data.is_hidden));
 
-      const { data: pwData } = await supabase
-        .from("post_passwords")
-        .select("password")
-        .eq("post_id", id)
-        .maybeSingle();
+      const { data: pwData } = await supabase.from("post_passwords").select("password").eq("post_id", id).maybeSingle();
       setPostPassword(pwData?.password ?? "");
     }
   };
@@ -64,9 +60,7 @@ export default function AdminPostEditor() {
   const savePostPassword = async (postId) => {
     const trimmed = postPassword.trim();
     if (trimmed) {
-      const { error: pwErr } = await supabase
-        .from("post_passwords")
-        .upsert({ post_id: postId, password: trimmed, updated_at: new Date().toISOString() });
+      const { error: pwErr } = await supabase.from("post_passwords").upsert({ post_id: postId, password: trimmed, updated_at: new Date().toISOString() });
       if (pwErr) throw pwErr;
     } else {
       const { error: pwErr } = await supabase.from("post_passwords").delete().eq("post_id", postId);
@@ -156,12 +150,7 @@ export default function AdminPostEditor() {
         await savePostPassword(id);
         navigate(`/post/${id}`);
       } else {
-        const { data: maxRow } = await supabase
-          .from("posts")
-          .select("display_order")
-          .order("display_order", { ascending: false })
-          .limit(1)
-          .maybeSingle();
+        const { data: maxRow } = await supabase.from("posts").select("display_order").order("display_order", { ascending: false }).limit(1).maybeSingle();
         const nextOrder = (maxRow?.display_order ?? 0) + 1;
 
         const { data, error: err } = await supabase
@@ -225,12 +214,7 @@ export default function AdminPostEditor() {
 
           <div className={styles.field}>
             <label className={styles.label}>슬라이드 갤러리 (선택)</label>
-            <SliderEditor
-              items={sliderItems}
-              onItemsChange={setSliderItems}
-              onRemovePath={(path) => setRemovedSliderPaths((prev) => [...prev, path])}
-              onError={setError}
-            />
+            <SliderEditor items={sliderItems} onItemsChange={setSliderItems} onRemovePath={(path) => setRemovedSliderPaths((prev) => [...prev, path])} onError={setError} />
           </div>
 
           <div className={styles.field}>
@@ -242,12 +226,7 @@ export default function AdminPostEditor() {
 
           <div className={styles.field}>
             <label className={styles.visibilityRow}>
-              <input
-                type="checkbox"
-                checked={isHidden}
-                onChange={(e) => setIsHidden(e.target.checked)}
-                className={styles.visibilityCheckbox}
-              />
+              <input type="checkbox" checked={isHidden} onChange={(e) => setIsHidden(e.target.checked)} className={styles.visibilityCheckbox} />
               <span className={styles.visibilityText}>
                 <span className={styles.visibilityTitle}>비공개 글로 저장</span>
                 <span className={styles.visibilityHint}>메인 목록과 일반 사용자에게 노출되지 않습니다. 관리자만 열람할 수 있어요.</span>
@@ -256,18 +235,9 @@ export default function AdminPostEditor() {
           </div>
 
           <div className={styles.field}>
-            <label className={styles.label}>게시글 비밀번호 (선택)</label>
-            <input
-              type="text"
-              value={postPassword}
-              onChange={(e) => setPostPassword(e.target.value)}
-              className={`input-base ${styles.passwordInput}`}
-              placeholder="비밀번호를 설정하면 좌물쇠 표시 후 입력해야 열람 가능"
-              autoComplete="off"
-            />
-            <span className={styles.visibilityHint}>
-              비워두면 비밀번호 잠금이 해제됩니다. 평문으로 저장되어 관리자만 확인할 수 있어요.
-            </span>
+            <label className={styles.label}>게시글 비밀번호 설정(선택)</label>
+            <input type="text" value={postPassword} onChange={(e) => setPostPassword(e.target.value)} className={`input-base ${styles.passwordInput}`} placeholder="비밀번호를 추가해주세요." autoComplete="off" />
+            <span className={styles.visibilityHint}>* 비워두면 비밀번호 잠금이 해제됩니다.</span>
           </div>
 
           {error && <p className={styles.error}>{error}</p>}

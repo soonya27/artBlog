@@ -123,21 +123,11 @@
   color: var(--ink-3);
 }
 
-.hiddenBadge {
-  padding: 1px 6px;
-  border: 1px solid var(--rule);
-  border-radius: 999px;
-  background: var(--surface-2);
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  color: var(--ink-2);
-}
-
 .passwordBadge {
   display: inline-flex;
-  gap: 4px;
+  gap: 6px;
   align-items: center;
-  padding: 1px 8px;
+  padding: 2px 4px 2px 8px;
   border: 1px solid var(--rule);
   border-radius: 999px;
   background: var(--surface-2);
@@ -152,6 +142,26 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+.eyeBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.eyeBtn:hover {
+  background: var(--surface);
+  color: var(--ink);
 }
 
 .date {
@@ -172,36 +182,65 @@
   font-size: 12px;
 }
 
-.lockBtn {
+.visibilityToggle {
   display: inline-flex;
+  gap: 8px;
   align-items: center;
-  justify-content: center;
-  width: 30px;
   height: 30px;
-  padding: 0;
-  border: 1px solid var(--rule);
-  border-radius: var(--radius);
+  padding: 0 4px;
+  border: none;
   background: transparent;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: 0.08em;
   color: var(--ink-3);
   cursor: pointer;
-  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+  transition: color 0.15s ease;
 }
 
-.lockBtn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+.visibilityToggle:hover {
+  color: var(--ink-2);
 }
 
-.lockBtnOn {
-  border-color: var(--ink);
-  background: var(--ink);
-  color: var(--bg);
+.visibilityLabel {
+  min-width: 28px;
+  text-align: center;
 }
 
-.lockBtnOn:hover {
-  border-color: var(--ink);
-  background: var(--ink);
-  color: var(--bg);
+.visibilityTrack {
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  width: 26px;
+  height: 14px;
+  border-radius: 999px;
+  background: var(--rule);
+  transition: background 0.18s ease;
+}
+
+.visibilityThumb {
+  display: block;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--surface);
+  transition: transform 0.18s ease, background 0.18s ease;
+}
+
+.visibilityToggleOn {
+  color: var(--ink);
+}
+
+.visibilityToggleOn .visibilityTrack {
+  background: #2563eb;
+}
+
+.visibilityToggleOn .visibilityThumb {
+  background: #fff;
+  transform: translateX(12px);
 }
 
 .footerActions {

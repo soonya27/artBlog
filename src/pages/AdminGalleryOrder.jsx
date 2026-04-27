@@ -171,23 +171,24 @@ export default function AdminGalleryOrder() {
             <h1 className={styles.title}>메인페이지 수정</h1>
             <p className={styles.desc}>드래그하여 메인페이지 갤러리의 노출 순서를 변경하세요. 게시글 자체는 수정되지 않습니다.</p>
           </div>
-          <div className={styles.actions}>
-            <Link
-              to="/admin"
-              className="btn-ghost"
-              onClick={(e) => {
-                if (isDirty && !confirm("저장하지 않은 변경사항이 있습니다. 나가시겠습니까?")) e.preventDefault();
-              }}
-            >
-              목록으로
-            </Link>
-            <button type="button" onClick={handleReset} disabled={!isDirty || saving} className="btn-ghost">
-              초기화
-            </button>
-            <button type="button" onClick={handleSave} disabled={!isDirty || saving} className="btn-primary">
-              {saving ? "저장 중..." : "순서 저장"}
-            </button>
-          </div>
+          <Link
+            to="/admin"
+            className={styles.backBtn}
+            onClick={(e) => {
+              if (isDirty && !confirm("저장하지 않은 변경사항이 있습니다. 나가시겠습니까?")) e.preventDefault();
+            }}
+          >
+            ← 목록으로
+          </Link>
+        </div>
+
+        <div className={styles.actions}>
+          <button type="button" onClick={handleReset} disabled={!isDirty || saving} className="btn-ghost">
+            초기화
+          </button>
+          <button type="button" onClick={handleSave} disabled={!isDirty || saving} className="btn-primary">
+            {saving ? "저장 중..." : "순서 저장"}
+          </button>
         </div>
 
         {error && <p className={styles.error}>{error}</p>}

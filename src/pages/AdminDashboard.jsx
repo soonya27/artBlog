@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Lock, Unlock } from "lucide-react";
+import { Eye, EyeOff, Lock } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { removeImages } from "../lib/storage";
 import { collectPostImagePaths } from "../lib/postCleanup";
@@ -21,6 +21,7 @@ export default function AdminDashboard() {
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [revealedIds, setRevealedIds] = useState(() => new Set());
 
   useEffect(() => {
     fetchPosts();
@@ -29,18 +30,33 @@ export default function AdminDashboard() {
   const fetchPosts = async () => {
     const { data } = await supabase
       .from("posts")
-      .select("id, title, image_url, image_path, is_hidden, has_password, created_at, comments(count), post_passwords(password)")
+      .select("id, title, image_url, image_path, is_hidden, has_password, created_at, comments(count)")
       .order("created_at", { ascending: false });
 
-    if (data) {
-      setPosts(
-        data.map((p) => ({
-          ...p,
-          comment_count: p.comments?.[0]?.count ?? 0,
-          post_password: p.post_passwords?.[0]?.password ?? null,
-        })),
-      );
+    if (!data) {
+      setLoading(false);
+      return;
     }
+
+    const idsWithPassword = data.filter((p) => p.has_password).map((p) => p.id);
+    const passwordMap = new Map();
+    if (idsWithPassword.length > 0) {
+      const { data: pwRows } = await supabase
+        .from("post_passwords")
+        .select("post_id, password")
+        .in("post_id", idsWithPassword);
+      if (pwRows) {
+        for (const row of pwRows) passwordMap.set(row.post_id, row.password);
+      }
+    }
+
+    setPosts(
+      data.map((p) => ({
+        ...p,
+        comment_count: p.comments?.[0]?.count ?? 0,
+        post_password: passwordMap.get(p.id) ?? null,
+      })),
+    );
     setLoading(false);
   };
 
@@ -65,6 +81,15 @@ export default function AdminDashboard() {
       return;
     }
     setPosts((prev) => prev.map((p) => (p.id === post.id ? { ...p, is_hidden: next } : p)));
+  };
+
+  const togglePasswordReveal = (id) => {
+    setRevealedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
   };
 
   return (
@@ -115,13 +140,26 @@ export default function AdminDashboard() {
                     {post.title}
                   </Link>
                   <div className={styles.meta}>
-                    {post.is_hidden && <span className={styles.hiddenBadge}>비공개</span>}
-                    {post.has_password && (
-                      <span className={styles.passwordBadge} title="이 게시글은 비밀번호로 보호되어 있습니다">
-                        <Lock size={10} strokeWidth={2} />
-                        <span className={styles.passwordValue}>{post.post_password ?? "비밀번호"}</span>
-                      </span>
-                    )}
+                    {post.has_password && (() => {
+                      const revealed = revealedIds.has(post.id);
+                      return (
+                        <span className={styles.passwordBadge} title="이 게시글은 비밀번호로 보호되어 있습니다">
+                          <Lock size={11} strokeWidth={2} />
+                          <span className={styles.passwordValue}>
+                            {revealed ? (post.post_password ?? "—") : "••••••"}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => togglePasswordReveal(post.id)}
+                            className={styles.eyeBtn}
+                            aria-label={revealed ? "비밀번호 숨기기" : "비밀번호 보기"}
+                            aria-pressed={revealed}
+                          >
+                            {revealed ? <Eye size={12} strokeWidth={1.75} /> : <EyeOff size={12} strokeWidth={1.75} />}
+                          </button>
+                        </span>
+                      );
+                    })()}
                     <span>{post.comment_count} 댓글</span>
                   </div>
                 </div>
@@ -131,13 +169,16 @@ export default function AdminDashboard() {
                 <div className={styles.rowActions}>
                   <button
                     type="button"
+                    role="switch"
                     onClick={() => handleToggleHidden(post)}
-                    className={`${styles.lockBtn} ${post.is_hidden ? styles.lockBtnOn : ""}`}
+                    className={`${styles.visibilityToggle} ${post.is_hidden ? "" : styles.visibilityToggleOn}`}
                     title={post.is_hidden ? "공개로 전환" : "비공개로 전환"}
-                    aria-label={post.is_hidden ? "공개로 전환" : "비공개로 전환"}
-                    aria-pressed={post.is_hidden}
+                    aria-checked={!post.is_hidden}
                   >
-                    {post.is_hidden ? <Lock size={14} strokeWidth={1.75} /> : <Unlock size={14} strokeWidth={1.75} />}
+                    <span className={styles.visibilityLabel}>{post.is_hidden ? "비공개" : "공개"}</span>
+                    <span className={styles.visibilityTrack} aria-hidden="true">
+                      <span className={styles.visibilityThumb} />
+                    </span>
                   </button>
                   <Link to={`/admin/edit/${post.id}`} className="btn-ghost">
                     수정

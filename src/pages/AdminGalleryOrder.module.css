@@ -49,12 +49,31 @@
   color: var(--ink-3);
 }
 
+.backBtn {
+  display: inline-flex;
+  flex-shrink: 0;
+  gap: 6px;
+  align-items: center;
+  padding: 0;
+  background: transparent;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+  transition: color 0.15s ease;
+}
+
+.backBtn:hover {
+  color: var(--ink);
+}
+
 .actions {
   display: flex;
-  flex-shrink: 0;
   flex-wrap: wrap;
   gap: 8px;
+  justify-content: flex-end;
   align-items: center;
+  margin-bottom: 24px;
 }
 
 .error {
