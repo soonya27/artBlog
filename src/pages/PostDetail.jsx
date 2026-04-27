@@ -19,6 +19,8 @@ export default function PostDetail() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [post, setPost] = useState(null);
+  const [prevPost, setPrevPost] = useState(null);
+  const [nextPost, setNextPost] = useState(null);
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -31,6 +33,16 @@ export default function PostDetail() {
     const { data } = await supabase.from("posts").select("*").eq("id", id).single();
     setPost(data);
     setLoading(false);
+    if (data) fetchAdjacentPosts(data.created_at);
+  };
+
+  const fetchAdjacentPosts = async (createdAt) => {
+    const [{ data: prev }, { data: next }] = await Promise.all([
+      supabase.from("posts").select("id, title").lt("created_at", createdAt).order("created_at", { ascending: false }).limit(1).maybeSingle(),
+      supabase.from("posts").select("id, title").gt("created_at", createdAt).order("created_at", { ascending: true }).limit(1).maybeSingle(),
+    ]);
+    setPrevPost(prev);
+    setNextPost(next);
   };
 
   const fetchComments = async () => {
@@ -102,6 +114,31 @@ export default function PostDetail() {
             </button>
           </div>
         )}
+
+        <nav className={styles.postNav} aria-label="게시글 네비게이션">
+          {prevPost ? (
+            <Link to={`/post/${prevPost.id}`} className={`${styles.navItem} ${styles.navPrev}`}>
+              <span className={styles.navLabel}>← 이전글</span>
+              <span className={styles.navTitle}>{prevPost.title}</span>
+            </Link>
+          ) : (
+            <span className={`${styles.navItem} ${styles.navPrev} ${styles.navDisabled}`}>
+              <span className={styles.navLabel}>← 이전글</span>
+              <span className={styles.navTitle}>이전 글이 없습니다</span>
+            </span>
+          )}
+          {nextPost ? (
+            <Link to={`/post/${nextPost.id}`} className={`${styles.navItem} ${styles.navNext}`}>
+              <span className={styles.navLabel}>다음글 →</span>
+              <span className={styles.navTitle}>{nextPost.title}</span>
+            </Link>
+          ) : (
+            <span className={`${styles.navItem} ${styles.navNext} ${styles.navDisabled}`}>
+              <span className={styles.navLabel}>다음글 →</span>
+              <span className={styles.navTitle}>다음 글이 없습니다</span>
+            </span>
+          )}
+        </nav>
 
         <hr className={styles.divider} />
 
