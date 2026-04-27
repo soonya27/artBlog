@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, Lock } from "lucide-react";
 import styles from "./PostCard.module.css";
 
 function formatDate(dateString) {
@@ -19,9 +19,17 @@ export default function PostCard({ post }) {
         ) : (
           <div className={styles.noImage}>No Image</div>
         )}
+        {post.has_password && (
+          <span className={styles.lockBadge} aria-label="비밀번호 보호 게시글">
+            <Lock size={12} strokeWidth={1.75} />
+          </span>
+        )}
       </div>
       <div className={styles.body}>
-        <div className={styles.title}>{post.title}</div>
+        <div className={styles.title}>
+          {post.has_password && <Lock size={13} strokeWidth={1.75} className={styles.titleLock} aria-hidden="true" />}
+          {post.title}
+        </div>
         <div className={styles.meta}>
           <span>{formatDate(post.created_at)}</span>
           <span className={styles.comments}>

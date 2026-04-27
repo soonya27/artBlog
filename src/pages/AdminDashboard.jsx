@@ -29,7 +29,7 @@ export default function AdminDashboard() {
   const fetchPosts = async () => {
     const { data } = await supabase
       .from("posts")
-      .select("id, title, image_url, image_path, is_hidden, created_at, comments(count)")
+      .select("id, title, image_url, image_path, is_hidden, has_password, created_at, comments(count), post_passwords(password)")
       .order("created_at", { ascending: false });
 
     if (data) {
@@ -37,6 +37,7 @@ export default function AdminDashboard() {
         data.map((p) => ({
           ...p,
           comment_count: p.comments?.[0]?.count ?? 0,
+          post_password: p.post_passwords?.[0]?.password ?? null,
         })),
       );
     }
@@ -115,6 +116,12 @@ export default function AdminDashboard() {
                   </Link>
                   <div className={styles.meta}>
                     {post.is_hidden && <span className={styles.hiddenBadge}>비공개</span>}
+                    {post.has_password && (
+                      <span className={styles.passwordBadge} title="이 게시글은 비밀번호로 보호되어 있습니다">
+                        <Lock size={10} strokeWidth={2} />
+                        <span className={styles.passwordValue}>{post.post_password ?? "비밀번호"}</span>
+                      </span>
+                    )}
                     <span>{post.comment_count} 댓글</span>
                   </div>
                 </div>

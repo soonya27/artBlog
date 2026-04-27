@@ -203,6 +203,12 @@
   color: var(--ink-3);
 }
 
+.passwordInput {
+  font-family: var(--font-mono) !important;
+  font-size: 14px !important;
+  letter-spacing: 0.04em;
+}
+
 .error {
   font-family: var(--font-ui);
   font-size: 13px;

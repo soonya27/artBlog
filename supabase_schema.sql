@@ -13,6 +13,7 @@ create table if not exists posts (
   slider_images jsonb not null default '[]'::jsonb,
   display_order integer not null default 0,
   is_hidden boolean not null default false,
+  has_password boolean not null default false,
   created_at timestamp with time zone default now(),
   updated_at timestamp with time zone default now()
 );
@@ -24,6 +25,10 @@ alter table posts
 -- 기존 테이블에 is_hidden 컬럼 추가 (이미 운영 중인 경우)
 alter table posts
   add column if not exists is_hidden boolean not null default false;
+
+-- 기존 테이블에 has_password 컬럼 추가 (이미 운영 중인 경우)
+alter table posts
+  add column if not exists has_password boolean not null default false;
 
 -- 기존 테이블에 display_order 컬럼 추가는 supabase_migration_display_order.sql 참고
 
@@ -85,6 +90,64 @@ create policy "Authenticated users can update posts"
 
 create policy "Authenticated users can delete posts"
   on posts for delete using (auth.role() = 'authenticated');
+
+-- Post passwords: 게시글별 평문 비밀번호. 관리자만 평문 조회/변경 가능.
+create table if not exists post_passwords (
+  post_id uuid primary key references posts(id) on delete cascade,
+  password text not null,
+  updated_at timestamp with time zone default now()
+);
+
+alter table post_passwords enable row level security;
+
+create policy "Authenticated can read post passwords"
+  on post_passwords for select using (auth.role() = 'authenticated');
+
+create policy "Authenticated can insert post passwords"
+  on post_passwords for insert with check (auth.role() = 'authenticated');
+
+create policy "Authenticated can update post passwords"
+  on post_passwords for update using (auth.role() = 'authenticated');
+
+create policy "Authenticated can delete post passwords"
+  on post_passwords for delete using (auth.role() = 'authenticated');
+
+create or replace function sync_post_has_password()
+returns trigger
+language plpgsql
+as $$
+begin
+  if (TG_OP = 'DELETE') then
+    update posts set has_password = false where id = OLD.post_id;
+    return OLD;
+  else
+    update posts
+    set has_password = (NEW.password is not null and length(btrim(NEW.password)) > 0)
+    where id = NEW.post_id;
+    return NEW;
+  end if;
+end;
+$$;
+
+drop trigger if exists trg_sync_post_has_password on post_passwords;
+create trigger trg_sync_post_has_password
+  after insert or update or delete on post_passwords
+  for each row execute function sync_post_has_password();
+
+create or replace function verify_post_password(p_post_id uuid, p_password text)
+returns boolean
+language sql
+security definer
+set search_path = public
+as $$
+  select exists(
+    select 1 from post_passwords
+    where post_id = p_post_id
+      and password = p_password
+  );
+$$;
+
+grant execute on function verify_post_password(uuid, text) to anon, authenticated;
 
 -- Comments: 누구나 읽기/쓰기, 삭제는 인증된 사용자만
 alter table comments enable row level security;

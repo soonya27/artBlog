@@ -15,7 +15,7 @@ export default function Home() {
   const fetchPosts = async () => {
     const { data, error } = await supabase
       .from("posts")
-      .select("id, title, image_url, created_at, content")
+      .select("id, title, image_url, created_at, content, has_password")
       .eq("is_hidden", false)
       .order("display_order", { ascending: true });
 

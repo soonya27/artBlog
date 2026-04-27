@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, Lock } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { removeImages } from "../lib/storage";
 import { collectPostImagePaths } from "../lib/postCleanup";
@@ -27,8 +27,15 @@ export default function PostDetail() {
   const [nextPost, setNextPost] = useState(null);
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [passwordInput, setPasswordInput] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [passwordVerified, setPasswordVerified] = useState(false);
+  const [verifying, setVerifying] = useState(false);
 
   useEffect(() => {
+    setPasswordInput("");
+    setPasswordError("");
+    setPasswordVerified(false);
     fetchPost();
     fetchComments();
   }, [id]);
@@ -52,6 +59,31 @@ export default function PostDetail() {
   const fetchComments = async () => {
     const { data } = await supabase.from("comments").select("*").eq("post_id", id).order("created_at", { ascending: true });
     setComments(data ?? []);
+  };
+
+  const handleVerifyPassword = async (e) => {
+    e.preventDefault();
+    if (!passwordInput.trim()) {
+      setPasswordError("비밀번호를 입력해주세요.");
+      return;
+    }
+    setVerifying(true);
+    setPasswordError("");
+    const { data, error } = await supabase.rpc("verify_post_password", {
+      p_post_id: id,
+      p_password: passwordInput,
+    });
+    setVerifying(false);
+    if (error) {
+      setPasswordError("확인 중 오류가 발생했습니다.");
+      return;
+    }
+    if (data === true) {
+      setPasswordVerified(true);
+      setPasswordError("");
+    } else {
+      setPasswordError("비밀번호가 일치하지 않습니다.");
+    }
   };
 
   const handleDelete = async () => {
@@ -80,6 +112,41 @@ export default function PostDetail() {
     );
   }
 
+  const passwordRequired = post.has_password && !user && !passwordVerified;
+
+  if (passwordRequired) {
+    return (
+      <div className={styles.page}>
+        <Header />
+        <main className={styles.main}>
+          <Link to="/artworks" className={styles.back}>
+            ← back to feed
+          </Link>
+          <div className={styles.passwordGate}>
+            <Lock size={26} strokeWidth={1.5} className={styles.passwordGateIcon} />
+            <h2 className={styles.passwordGateTitle}>비밀번호가 필요한 게시글입니다</h2>
+            <p className={styles.passwordGateHint}>이 게시글은 비밀번호로 보호되어 있어요. 비밀번호를 입력해 주세요.</p>
+            <form onSubmit={handleVerifyPassword} className={styles.passwordGateForm}>
+              <input
+                type="password"
+                value={passwordInput}
+                onChange={(e) => setPasswordInput(e.target.value)}
+                className={`input-base ${styles.passwordGateInput}`}
+                placeholder="비밀번호"
+                autoFocus
+                autoComplete="off"
+              />
+              <button type="submit" className="btn-primary" disabled={verifying}>
+                {verifying ? "확인 중..." : "확인"}
+              </button>
+            </form>
+            {passwordError && <p className={styles.passwordGateError}>{passwordError}</p>}
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.page}>
       <Header />
@@ -98,6 +165,7 @@ export default function PostDetail() {
             <div className={styles.metaDate}>
               {formatDate(post.created_at)}
               {post.is_hidden && user && <span className={styles.hiddenBadge}>비공개</span>}
+              {post.has_password && user && <span className={styles.hiddenBadge}>비밀글</span>}
             </div>
             <h1 className={styles.title}>{post.title}</h1>
             <div className={styles.heroStats}>
