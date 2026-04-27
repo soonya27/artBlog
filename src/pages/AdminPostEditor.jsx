@@ -4,6 +4,7 @@ import { supabase } from "../lib/supabase";
 import { uploadImageToStorage, validateImageFile } from "../lib/storage";
 import Header from "../components/common/Header";
 import RichEditor from "../components/admin/RichEditor";
+import SliderEditor from "../components/admin/SliderEditor";
 import { Upload, X, Image as ImageIcon } from "lucide-react";
 import styles from "./AdminPostEditor.module.css";
 
@@ -20,6 +21,8 @@ export default function AdminPostEditor() {
   const [existingImageUrl, setExistingImageUrl] = useState(null);
   const [existingImagePath, setExistingImagePath] = useState(null);
   const [removedImagePath, setRemovedImagePath] = useState(null);
+  const [sliderItems, setSliderItems] = useState([]);
+  const [removedSliderPaths, setRemovedSliderPaths] = useState([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
@@ -35,6 +38,16 @@ export default function AdminPostEditor() {
       setExistingImageUrl(data.image_url);
       setExistingImagePath(data.image_path);
       setRemovedImagePath(null);
+      const stored = Array.isArray(data.slider_images) ? data.slider_images : [];
+      setSliderItems(
+        stored.map((item) => ({
+          id: crypto.randomUUID(),
+          url: item.url,
+          path: item.path,
+          caption: item.caption ?? "",
+        }))
+      );
+      setRemovedSliderPaths([]);
     }
   };
 
@@ -90,11 +103,26 @@ export default function AdminPostEditor() {
         imagePath = null;
       }
 
+      const sliderPayload = [];
+      for (const item of sliderItems) {
+        if (item.file) {
+          const uploaded = await uploadImageToStorage(item.file, "slider");
+          sliderPayload.push({ url: uploaded.url, path: uploaded.path, caption: item.caption ?? "" });
+        } else {
+          sliderPayload.push({ url: item.url, path: item.path, caption: item.caption ?? "" });
+        }
+      }
+
+      if (removedSliderPaths.length > 0) {
+        await supabase.storage.from("artblog-images").remove(removedSliderPaths);
+      }
+
       const payload = {
         title: title.trim(),
         content,
         image_url: imageUrl,
         image_path: imagePath,
+        slider_images: sliderPayload,
         updated_at: new Date().toISOString(),
       };
 
@@ -155,6 +183,16 @@ export default function AdminPostEditor() {
                 </button>
               )}
             </div>
+          </div>
+
+          <div className={styles.field}>
+            <label className={styles.label}>슬라이드 갤러리 (선택)</label>
+            <SliderEditor
+              items={sliderItems}
+              onItemsChange={setSliderItems}
+              onRemovePath={(path) => setRemovedSliderPaths((prev) => [...prev, path])}
+              onError={setError}
+            />
           </div>
 
           <div className={styles.field}>

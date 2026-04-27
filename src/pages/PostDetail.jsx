@@ -4,6 +4,7 @@ import { supabase } from "../lib/supabase";
 import { useAuth } from "../hooks/useAuth";
 import Header from "../components/common/Header";
 import CommentSection from "../components/public/CommentSection";
+import PostSlider from "../components/public/PostSlider";
 import styles from "./PostDetail.module.css";
 
 function formatDate(dateString) {
@@ -52,8 +53,15 @@ export default function PostDetail() {
 
   const handleDelete = async () => {
     if (!window.confirm("이 게시물을 삭제할까요?")) return;
-    if (post.image_path) {
-      await supabase.storage.from("artblog-images").remove([post.image_path]);
+    const pathsToRemove = [];
+    if (post.image_path) pathsToRemove.push(post.image_path);
+    if (Array.isArray(post.slider_images)) {
+      for (const item of post.slider_images) {
+        if (item?.path) pathsToRemove.push(item.path);
+      }
+    }
+    if (pathsToRemove.length > 0) {
+      await supabase.storage.from("artblog-images").remove(pathsToRemove);
     }
     await supabase.from("posts").delete().eq("id", id);
     navigate("/artworks");
@@ -94,6 +102,10 @@ export default function PostDetail() {
           <div className={styles.gallery}>
             <img src={post.image_url} alt={post.title} className={styles.galleryImage} />
           </div>
+        )}
+
+        {Array.isArray(post.slider_images) && post.slider_images.length > 0 && (
+          <PostSlider items={post.slider_images} />
         )}
 
         {post.content && (

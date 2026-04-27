@@ -10,9 +10,14 @@ create table if not exists posts (
   content text,
   image_url text,
   image_path text,
+  slider_images jsonb not null default '[]'::jsonb,
   created_at timestamp with time zone default now(),
   updated_at timestamp with time zone default now()
 );
+
+-- 기존 테이블에 slider_images 컬럼 추가 (이미 운영 중인 경우)
+alter table posts
+  add column if not exists slider_images jsonb not null default '[]'::jsonb;
 
 -- 2. Comments 테이블
 create table if not exists comments (

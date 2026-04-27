@@ -1,0 +1,129 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.stage {
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  min-height: 360px;
+  padding: 24px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  background: var(--surface-2);
+}
+
+.image {
+  display: block;
+  max-width: 100%;
+  max-height: 560px;
+  border-radius: 2px;
+  background: var(--surface);
+  object-fit: contain;
+  box-shadow: 0 10px 30px -15px rgba(40, 25, 10, 0.3);
+}
+
+.navBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+
+.navBtn:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.navBtn:disabled {
+  cursor: not-allowed;
+  opacity: 0.25;
+}
+
+.navPrev {
+  left: 12px;
+}
+
+.navNext {
+  right: 12px;
+}
+
+.caption {
+  margin: 0;
+  padding: 0 4px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  text-align: center;
+  white-space: pre-wrap;
+}
+
+.dots {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--rule);
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.dot:hover {
+  background: var(--ink-3);
+}
+
+.dotActive {
+  background: var(--accent);
+  transform: scale(1.25);
+}
+
+.counter {
+  margin-left: 10px;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+}
+
+@media (max-width: 600px) {
+  .stage {
+    min-height: 240px;
+    padding: 12px;
+  }
+
+  .navBtn {
+    width: 34px;
+    height: 34px;
+  }
+
+  .navPrev {
+    left: 6px;
+  }
+
+  .navNext {
+    right: 6px;
+  }
+}
