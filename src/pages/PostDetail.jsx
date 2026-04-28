@@ -48,10 +48,7 @@ export default function PostDetail() {
   };
 
   const fetchAdjacentPosts = async (createdAt) => {
-    const [{ data: prev }, { data: next }] = await Promise.all([
-      supabase.from("posts").select("id, title").eq("is_hidden", false).lt("created_at", createdAt).order("created_at", { ascending: false }).limit(1).maybeSingle(),
-      supabase.from("posts").select("id, title").eq("is_hidden", false).gt("created_at", createdAt).order("created_at", { ascending: true }).limit(1).maybeSingle(),
-    ]);
+    const [{ data: prev }, { data: next }] = await Promise.all([supabase.from("posts").select("id, title").eq("is_hidden", false).lt("created_at", createdAt).order("created_at", { ascending: false }).limit(1).maybeSingle(), supabase.from("posts").select("id, title").eq("is_hidden", false).gt("created_at", createdAt).order("created_at", { ascending: true }).limit(1).maybeSingle()]);
     setPrevPost(prev);
     setNextPost(next);
   };
@@ -124,18 +121,12 @@ export default function PostDetail() {
           </Link>
           <div className={styles.passwordGate}>
             <Lock size={26} strokeWidth={1.5} className={styles.passwordGateIcon} />
-            <h2 className={styles.passwordGateTitle}>비밀번호가 필요한 게시글입니다</h2>
-            <p className={styles.passwordGateHint}>이 게시글은 비밀번호로 보호되어 있어요. 비밀번호를 입력해 주세요.</p>
+            <h2 className={styles.passwordGateTitle}>암호를 입력해주세요.</h2>
+            <p className={styles.passwordGateHint}>
+              이 게시글은 비밀번호로 보호되어 있어요.<br></br>비밀번호를 입력해 주세요.
+            </p>
             <form onSubmit={handleVerifyPassword} className={styles.passwordGateForm}>
-              <input
-                type="password"
-                value={passwordInput}
-                onChange={(e) => setPasswordInput(e.target.value)}
-                className={`input-base ${styles.passwordGateInput}`}
-                placeholder="비밀번호"
-                autoFocus
-                autoComplete="off"
-              />
+              <input type="password" value={passwordInput} onChange={(e) => setPasswordInput(e.target.value)} className={`input-base ${styles.passwordGateInput}`} placeholder="비밀번호" autoFocus autoComplete="off" />
               <button type="submit" className="btn-primary" disabled={verifying}>
                 {verifying ? "확인 중..." : "확인"}
               </button>
