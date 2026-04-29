@@ -22,6 +22,8 @@
     transparent 0 12px,
     rgba(120, 90, 40, 0.04) 12px 13px
   );
+  touch-action: pan-y;
+  user-select: none;
 }
 
 .image {

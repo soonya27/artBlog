@@ -1,9 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import styles from "./PostSlider.module.css";
 
+const SWIPE_THRESHOLD = 50;
+
 export default function PostSlider({ items }) {
   const [index, setIndex] = useState(0);
+  const pointerStartRef = useRef(null);
 
   useEffect(() => {
     const handler = (e) => {
@@ -20,11 +23,45 @@ export default function PostSlider({ items }) {
   const hasPrev = index > 0;
   const hasNext = index < items.length - 1;
 
+  const handlePointerDown = (e) => {
+    if (e.target.closest("button")) return;
+    pointerStartRef.current = { x: e.clientX, y: e.clientY, id: e.pointerId };
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+  };
+
+  const handlePointerUp = (e) => {
+    const start = pointerStartRef.current;
+    pointerStartRef.current = null;
+    if (!start || start.id !== e.pointerId) return;
+
+    const dx = e.clientX - start.x;
+    const dy = e.clientY - start.y;
+    if (Math.abs(dx) < SWIPE_THRESHOLD) return;
+    if (Math.abs(dx) <= Math.abs(dy)) return;
+
+    if (dx < 0) setIndex((i) => Math.min(items.length - 1, i + 1));
+    else setIndex((i) => Math.max(0, i - 1));
+  };
+
+  const handlePointerCancel = () => {
+    pointerStartRef.current = null;
+  };
+
   return (
     <div className={styles.wrap}>
       <div className={styles.card}>
-        <div className={styles.stage}>
-          <img src={current.url} alt={current.caption ?? ""} className={styles.image} />
+        <div
+          className={styles.stage}
+          onPointerDown={handlePointerDown}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={handlePointerCancel}
+        >
+          <img
+            src={current.url}
+            alt={current.caption ?? ""}
+            className={styles.image}
+            draggable={false}
+          />
 
           {items.length > 1 && (
             <>
