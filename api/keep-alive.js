@@ -9,8 +9,16 @@ export default async function handler(req, res) {
   }
 
   const supabase = createClient(supabaseUrl, supabaseAnonKey)
-  const { error } = await supabase.from('site_settings').select('id').limit(1)
+
+  const { error: insertError } = await supabase.from('keep_alive_log').insert({})
+  if (insertError) return res.status(500).json({ ok: false, error: insertError.message })
+
+  const { data, error } = await supabase
+    .from('keep_alive_log')
+    .select('pinged_at')
+    .order('pinged_at', { ascending: false })
+    .limit(10)
   if (error) return res.status(500).json({ ok: false, error: error.message })
 
-  return res.status(200).json({ ok: true, at: new Date().toISOString() })
+  return res.status(200).json({ ok: true, at: new Date().toISOString(), recent: data })
 }
